@@ -22,11 +22,30 @@ class HanoiGraph():
         self.diskCount = diskCount
         self.rodCount = len(rodCostList)
         
+        self.graph.add_node("100", color=self.ORDINARY_NODE_COLOR)
         root = str("0" * diskCount) # используем строку потому что надо хешируемый контейнер                    
         self.graph.add_node(root, color=self.ROOT_NODE_COLOR) # "корень" = начальное состояние
+        #nx.set_node_attributes(self.graph, {root: {"color" : }})
+        #attrs = {0: {"attr1": 20, "attr2": "nothing"}, 1: {"attr2": 3}}
+
+        for n,d in self.graph.nodes(data=True):
+            print(n,d)
+        
 
         self.graph.add_node("100", color=self.ORDINARY_NODE_COLOR)
         # TODO: условия добавляемости нод и способ добавления, проверить на примере
+        # TODO: разобраться с параметрами нод
+        for n,d in self.graph.nodes(data=True):
+            print(n,d)
+
+    def addNode(self, rootNode, dstNodeName):
+        pass
+
+    def addPossibleNodes(self, rootNode):
+        pass
+
+    def findNode(self, rootNode):
+        pass
 
     # если есть диск с меньшим индексом на том же кольце -> текущий диск заблокирован
     def isDiskLocked(self, currentNode, diskIndex):
@@ -47,7 +66,9 @@ class HanoiGraph():
     # возращает список цветов нод
     def getNodeColors(self):
         colors = [] 
-        return '#b41f1f' # TODO
+        for n,d in self.graph.nodes(data=True):
+            colors.append(d["color"])
+        return colors
 
     def draw(self):
         plt.figure(figsize=(8,8))
