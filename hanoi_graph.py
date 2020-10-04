@@ -26,8 +26,7 @@ class HanoiGraph():
         self.graph.add_node(root, color=self.ROOT_NODE_COLOR) # "корень" = начальное состояние
 
         self.graph.add_node("100", color=self.ORDINARY_NODE_COLOR)
-        #e=[('a','b',0.3),('b','c',0.9),('a','c',0.5),('c','d',1.2)] # TEST
-        #self.graph.add_weighted_edges_from(e)
+        # TODO: условия добавляемости нод и способ добавления, проверить на примере
 
     # если есть диск с меньшим индексом на том же кольце -> текущий диск заблокирован
     def isDiskLocked(self, currentNode, diskIndex):
