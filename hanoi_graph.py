@@ -13,7 +13,7 @@ import matplotlib.pyplot as plt
 class HanoiGraph():
     ''' класс графа с проверкой ограничений при добавлении вершин;
         считается, что башня построена на 0-ом штыре;       
-        положение дисков представлено списком;
+        положение дисков представлено строкой;
         первый элемент - нулевой (наименьший диск)
     '''
     PRINT_PREFIX = '[HGRAPH]: '
@@ -30,6 +30,8 @@ class HanoiGraph():
         self.graph = nx.DiGraph() # представим положение дисков как вершину направленного графа
 
         self.diskCount = diskCount
+        self.diskRange = range(0,diskCount)
+
         self.rodCount = len(rodCostList)
         self.rodCost = rodCostList
         
@@ -37,6 +39,9 @@ class HanoiGraph():
         self.graph.add_node(root, color=self.ROOT_NODE_COLOR, # "корень" = начальное состояние
                                   weight=self.rodCost[0],
                                   name=root) 
+
+        self.generationIndex = 0
+        self.generationDict = {self.generationIndex: [root]} # словарь со списком нод каждого "поколения"
 
         self.tryToAddNode(self.graph.nodes["000"], "100")
         self.tryToAddNode(self.graph.nodes["000"], "001")
@@ -58,13 +63,13 @@ class HanoiGraph():
             self.DEBUG_PRINT("Disk move locked [{dst}] <- [{root}]".format(i=changedIndex, dst=dstNodeName, root=rootNode["name"]))
             return
 
-        for n,d in self.graph.nodes(data=True):
-            if d["name"] == dstNodeName:
+        for n in self.generationDict[self.generationIndex]:
+            if self.graph.nodes[n]["name"] == dstNodeName:
                 self.DEBUG_PRINT("Node [{0}] exists, add edge".format(dstNodeName))
                 self.graph.add_edge(rootNode, n, weight=self.rodCost[int(dstNodeName[changedIndex])])
                 return
 
-        self.graph.add_node(dstNodeName, color=self.ORDINARY_NODE_COLOR, 
+        self.graph.add_node(dstNodeName, color=self.ORDINARY_NODE_COLOR, # create node
                                          weight=self.rodCost[int(dstNodeName[changedIndex])],
                                          name=dstNodeName) 
 
@@ -99,7 +104,11 @@ class HanoiGraph():
 
     def draw(self):
         plt.figure(figsize=(8,8))
-        nx.draw(self.graph, with_labels=True, font_weight='bold', node_color=self.getNodeColors())
+        nx.draw(self.graph, with_labels=True, node_color=self.getNodeColors()) 
+        # TODO: отрисовка весов и pos'ов
+        # pos = nx.get_node_attributes(self.graph,'pos')
+        # labels = nx.get_edge_attributes(self.graph,'weight')
+        # nx.draw_networkx_edge_labels(self.graph, pos, edge_labels=labels)
 
         plt.show() 
 
@@ -107,3 +116,19 @@ if __name__ == "__main__":
     graph = HanoiGraph(3, [1, 2, 3])
 
     graph.draw()
+
+
+
+
+# G=nx.Graph()
+# i=1
+# G.add_node(i,pos=(i,i))
+# G.add_node(2,pos=(2,2))
+# G.add_node(3,pos=(1,0))
+# G.add_edge(1,2,weight=0.5)
+# G.add_edge(1,3,weight=9.8)
+# pos=nx.get_node_attributes(G,'pos')
+# nx.draw(G,pos,with_labels=True)
+# labels = nx.get_edge_attributes(G,'weight')
+# nx.draw_networkx_edge_labels(G,pos,edge_labels=labels)
+# plt.show() 
