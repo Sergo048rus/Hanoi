@@ -73,6 +73,7 @@ class Window(QMainWindow):
 
 
 
+
 Hanoi = Hanoi()
 App = QApplication(sys.argv)
 window = Window(Hanoi)
