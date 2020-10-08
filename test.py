@@ -50,17 +50,17 @@ class Window(QMainWindow):
         
         # rect1 = scene.addRect(100,0,2,420,bluePen,blueBrush)
 
-        disc_list = Hanoi.StartInit(8,4,scene)
+        disc_list = Hanoi.StartInit(20,10,scene)
 
-        scene.removeItem(disc_list[7])
-        disc_list[7] = Hanoi.disk_place(2,0,7,scene)
+        # scene.removeItem(disc_list[7])
+        # disc_list[7] = Hanoi.disk_place(2,0,7,scene)
         # rect2 = Hanoi.disk_place(0,2,20,scene)
 
         # rect2 = Hanoi.disk_place(0,1,2,scene)
-        # rect3 = Hanoi.disk_place(9,5,1,scene)
-        # rect4 = Hanoi.disk_place(8,4,1,scene)
-        # rect5 = Hanoi.disk_place(7,5,1,scene)
-        # rect5 = Hanoi.disk_place(10,20,1,scene)
+        rect3 = Hanoi.disk_place(9,5,1,scene)
+        rect4 = Hanoi.disk_place(8,4,1,scene)
+        rect5 = Hanoi.disk_place(7,5,1,scene)
+        rect5 = Hanoi.disk_place(10,20,1,scene)
         # scene.removeItem(rect1)
 
         # spisok_rect = [rect,rect1]
