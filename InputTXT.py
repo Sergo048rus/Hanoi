@@ -1,5 +1,3 @@
-
-
 #Constant
 CONST_NPARTS = 1
 CONST_COST   = CONST_NPARTS + 3
@@ -98,7 +96,7 @@ class InputTXT():
             if l[CONST_ORDER] == 'ORDER':  
                 self.buff = ''
                 lineOrder = CONST_ORDER + 1                             # Стартуем со следующей строки
-                while l[lineOrder] != '/':
+                while l[lineOrder][0] != '/':
                     buffOrder = listOrder()
                     self.buff = ''  
                     count = 1                               
@@ -106,6 +104,8 @@ class InputTXT():
                         if l[lineOrder][i] == ' ' and count == 1:
                             try:
                                 buffOrder.disk = int(self.buff)
+                                if buffOrder.disk > self.numDisk - 1:
+                                    self.returnErr = self.statusErr.errOrder
                             except ValueError:
                                 self.returnErr = self.statusErr.errOrder
                             self.buff = ''
@@ -114,6 +114,8 @@ class InputTXT():
                             if l[lineOrder][i] == ' ' and count == 2:
                                 try:
                                     buffOrder.columnFrom = int(self.buff)
+                                    if buffOrder.columnFrom > self.numColumn - 1:
+                                        self.returnErr = self.statusErr.errOrder
                                 except ValueError:
                                     self.returnErr = self.statusErr.errOrder
                                 self.buff = ''
@@ -123,6 +125,8 @@ class InputTXT():
 
                     try:
                         buffOrder.columnTo = int(self.buff)
+                        if buffOrder.columnTo > self.numColumn - 1:
+                                        self.returnErr = self.statusErr.errOrder
                         self.order.append(buffOrder)
                     except ValueError:
                         self.returnErr = self.statusErr.errOrder  
@@ -135,8 +139,10 @@ class InputTXT():
 
 
 test = InputTXT()
-# disk, column, diskCost, err = test.ReadDisk('FileInit.txt')
-# print(' Disk = ',disk,'\n','Column = ', column,'\n','Err = ', err,'\n', 'Cost', diskCost)
+
+
+disk, column, diskCost, err = test.ReadDisk('FileInit.txt')
+print(' Disk = ',disk,'\n','Column = ', column,'\n','Err = ', err,'\n', 'Cost', diskCost)
 
 order,sizeOrder, returnErr = test.ReadOrder('FileInit.txt')
 print('Err = ', returnErr)
