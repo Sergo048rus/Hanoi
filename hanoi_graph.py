@@ -23,7 +23,7 @@ class HanoiGraph():
 
     def DEBUG_PRINT(self, dstr):
         if self.DEBUG_LEVEL == 0: 
-            print(self.PRINT_PREFIX + str(dstr))
+            print(self.PRINT_PREFIX + str(dstr)) # TODO: смотреть предков и если совпадает то не строить
     
     # входные аргументы: кол-во дисков и список со стоимостью каждого штыря
     def __init__(self, diskCount, rodCostList):
@@ -40,20 +40,37 @@ class HanoiGraph():
                                   weight=self.rodCost[0],
                                   name=root) 
 
-        self.generationIndex = 0
-        self.generationDict = {self.generationIndex: [root]} # словарь со списком нод каждого "поколения"
+        self.genIndex = 0
+        self.genDict = {self.genIndex: [root]} # словарь со списком нод каждого "поколения"
 
-        self.tryToAddNode(self.graph.nodes["000"], "100")
-        self.tryToAddNode(self.graph.nodes["000"], "001")
-        #self.graph.add_node("100", color=self.ORDINARY_NODE_COLOR)
+        while len(self.genDict[self.genIndex]) != 0: 
+            self.DEBUG_PRINT("Try makeGen #{i}".format(i=self.genIndex))
+
+            ngen = self.makeGen()
+            self.genIndex += 1
+            self.genDict[self.genIndex] = ngen
+        
+        self.DEBUG_PRINT("No turns on gen #{i}".format(i=self.genIndex))
+        self.tryToAddNode(self.graph.nodes["000"],"100")
+        self.tryToAddNode(self.graph.nodes["100"], "000")
+        self.tryToAddNode(self.graph.nodes["000"], "120")
+        self.tryToAddNode(self.graph.nodes["000"], "020")
+
+    def makeGen(self):
+        return []
 
     # добавляет ноду со связью, если это возможно
     def tryToAddNode(self, rootNode, dstNodeName):
+        countOfChanges = 0
         changedIndex = 0
         for i in range(0, self.diskCount):
             if rootNode["name"][i] != dstNodeName[i]:
                 changedIndex = i
-                break
+                countOfChanges += 1
+
+        if countOfChanges > 1:
+            self.DEBUG_PRINT("Multiple move [{dst}] <- [{root}]".format(i=changedIndex, dst=dstNodeName, root=rootNode["name"]))
+            return
 
         if self.isDiskLocked(rootNode, changedIndex):
             self.DEBUG_PRINT("Disk #{i} locked [{dst}] <- [{root}]".format(i=changedIndex, dst=dstNodeName, root=rootNode["name"]))
@@ -63,7 +80,7 @@ class HanoiGraph():
             self.DEBUG_PRINT("Disk move locked [{dst}] <- [{root}]".format(i=changedIndex, dst=dstNodeName, root=rootNode["name"]))
             return
 
-        for n in self.generationDict[self.generationIndex]:
+        for n in self.genDict[self.genIndex]:
             if self.graph.nodes[n]["name"] == dstNodeName:
                 self.DEBUG_PRINT("Node [{0}] exists, add edge".format(dstNodeName))
                 self.graph.add_edge(rootNode, n, weight=self.rodCost[int(dstNodeName[changedIndex])])
@@ -111,6 +128,23 @@ class HanoiGraph():
         # nx.draw_networkx_edge_labels(self.graph, pos, edge_labels=labels)
 
         plt.show() 
+
+
+class HanoiGraphOrder():
+    ''' аналог HanoiGraph, но стороит существующий ORDER
+        реализованы все проверки кроме специфичных для HanoiGraph
+        moveOrder = { "dI" : 0, "rSrc" : 0, "rDst" : 1 }
+    '''
+    def __init__(self, diskCount, rodCostList, moveOrder):
+        self.graph = nx.DiGraph() 
+
+        self.diskCount = diskCount
+        self.diskRange = range(0,diskCount)
+
+        self.rodCount = len(rodCostList)
+        self.rodCost = rodCostList
+
+
 
 if __name__ == "__main__":  
     graph = HanoiGraph(3, [1, 2, 3])
