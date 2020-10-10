@@ -65,7 +65,11 @@ class InputTXT():
                     if l[CONST_COLUMN][i] == ' ':
                         self.numColumn = self.numColumn + 1
                         try:
-                            self.diskCost.append(int(self.buff))
+                            if int(self.buff) > 0:
+                                self.diskCost.append(int(self.buff))
+                            else:
+                                self.diskCost.append(int(self.buff))
+                                self.returnErr = self.statusErr.errColumn
                         except ValueError:
                             self.returnErr = self.statusErr.errColumn
                         self.buff = ''
@@ -104,7 +108,7 @@ class InputTXT():
                         if l[lineOrder][i] == ' ' and count == 1:
                             try:
                                 buffOrder.disk = int(self.buff)
-                                if buffOrder.disk > self.numDisk - 1:
+                                if buffOrder.disk > self.numDisk - 1 or buffOrder.disk < 0:
                                     self.returnErr = self.statusErr.errOrder
                             except ValueError:
                                 self.returnErr = self.statusErr.errOrder
@@ -114,7 +118,7 @@ class InputTXT():
                             if l[lineOrder][i] == ' ' and count == 2:
                                 try:
                                     buffOrder.columnFrom = int(self.buff)
-                                    if buffOrder.columnFrom > self.numColumn - 1:
+                                    if buffOrder.columnFrom > self.numColumn - 1 or buffOrder.columnFrom < 0:
                                         self.returnErr = self.statusErr.errOrder
                                 except ValueError:
                                     self.returnErr = self.statusErr.errOrder
@@ -125,7 +129,7 @@ class InputTXT():
 
                     try:
                         buffOrder.columnTo = int(self.buff)
-                        if buffOrder.columnTo > self.numColumn - 1:
+                        if buffOrder.columnTo > self.numColumn - 1 or buffOrder.columnTo < 0:
                                         self.returnErr = self.statusErr.errOrder
                         self.order.append(buffOrder)
                     except ValueError:
