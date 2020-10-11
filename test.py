@@ -66,10 +66,11 @@ class Window(QMainWindow):
         # spisok_rect = [rect,rect1]
         # scene.removeItem(spisok_rect[0])
 
-        self.setWindowIcon(QtGui.QIcon("apelsin.png"))
+        self.setWindowIcon(QtGui.QIcon("doc/apelsin.png"))
         self.setWindowTitle(self.title)
         self.setGeometry(self.top, self.left, self.width, self.heigth)
         self.show()
+
 
 
 
