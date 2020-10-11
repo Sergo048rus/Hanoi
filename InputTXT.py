@@ -3,6 +3,7 @@ CONST_NPARTS = 1
 CONST_COST   = CONST_NPARTS + 3
 CONST_COLUMN = CONST_COST + 1
 CONST_ORDER  = CONST_COST + 4
+
 class enumErr():
     def __init__(self) -> None:
         self.noErr        = 0
@@ -10,13 +11,6 @@ class enumErr():
         self.errColumn    = 2
         self.errOrder     = 3
         self.errFile      = 4
-
-class listOrder():
-    def __init__(self) -> None:
-        self.disk       = 0
-        self.columnFrom = 0
-        self.columnTo   = 0
-
 
 
 class InputTXT():
@@ -101,14 +95,15 @@ class InputTXT():
                 self.buff = ''
                 lineOrder = CONST_ORDER + 1                             # Стартуем со следующей строки
                 while l[lineOrder][0] != '/':
-                    buffOrder = listOrder()
+                    # buffOrder = listOrder()
+                    buffOrder = {}
                     self.buff = ''  
                     count = 1                               
                     for i in range(len(l[lineOrder])):                   # Определение цены штырей и их количества
                         if l[lineOrder][i] == ' ' and count == 1:
                             try:
-                                buffOrder.disk = int(self.buff)
-                                if buffOrder.disk > self.numDisk - 1 or buffOrder.disk < 0:
+                                buffOrder['dI'] = int(self.buff)
+                                if buffOrder['dI'] > self.numDisk - 1 or buffOrder['dI'] < 0:
                                     self.returnErr = self.statusErr.errOrder
                             except ValueError:
                                 self.returnErr = self.statusErr.errOrder
@@ -117,8 +112,8 @@ class InputTXT():
                         else: 
                             if l[lineOrder][i] == ' ' and count == 2:
                                 try:
-                                    buffOrder.columnFrom = int(self.buff)
-                                    if buffOrder.columnFrom > self.numColumn - 1 or buffOrder.columnFrom < 0:
+                                    buffOrder['rSrc'] = int(self.buff)
+                                    if buffOrder['rSrc'] > self.numColumn - 1 or buffOrder['rSrc'] < 0:
                                         self.returnErr = self.statusErr.errOrder
                                 except ValueError:
                                     self.returnErr = self.statusErr.errOrder
@@ -128,8 +123,8 @@ class InputTXT():
                                 self.buff = self.buff + l[lineOrder][i]
 
                     try:
-                        buffOrder.columnTo = int(self.buff)
-                        if buffOrder.columnTo > self.numColumn - 1 or buffOrder.columnTo < 0:
+                        buffOrder['rDst'] = int(self.buff)
+                        if buffOrder['rDst'] > self.numColumn - 1 or buffOrder['rDst'] < 0:
                                         self.returnErr = self.statusErr.errOrder
                         self.order.append(buffOrder)
                     except ValueError:
@@ -151,4 +146,4 @@ print(' Disk = ',disk,'\n','Column = ', column,'\n','Err = ', err,'\n', 'Cost', 
 order,sizeOrder, returnErr = test.ReadOrder('FileInit.txt')
 print('Err = ', returnErr)
 for i in range(0, sizeOrder):
-    print(' disk  = ',order[i].disk, 'columnFrom = ',order[i].columnFrom, 'columnTo = ',order[i].columnTo,'\n')
+    print(' disk  = ',order[i]['dI'], 'columnFrom = ',order[i]['rSrc'], 'columnTo = ',order[i]['rDst'],'\n')
