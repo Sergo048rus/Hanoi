@@ -89,7 +89,7 @@ class InputTXT():
         if self.returnErr != self.statusErr.errFile:
             l = [line.strip() for line in self.f]
             self.f.close()
-            print(l)
+            # print(l)
 
             if l[CONST_ORDER] == 'ORDER':  
                 self.buff = ''
@@ -139,11 +139,11 @@ class InputTXT():
 
 if __name__ == "__main__":  
     test = InputTXT()
-    
-    
+
+
     disk, column, diskCost, err = test.ReadDisk('FileInit.txt')
     print(' Disk = ',disk,'\n','Column = ', column,'\n','Err = ', err,'\n', 'Cost', diskCost)
-    
+
     order,sizeOrder, returnErr = test.ReadOrder('FileInit.txt')
     print('Err = ', returnErr)
     for i in range(0, sizeOrder):

@@ -106,10 +106,17 @@ class HanoiGraph():
         return result
             
     # если на стержне для переноса есть с диск с меньшим индексом -> текущий диск перенести нельзя 
-    def isDiskMoveLocked(self, currentNode, dstNodeName, diskIndex):
+    # def isDiskMoveLocked(self, currentNode, dstNodeName, diskIndex):
+    #     result = False
+    #     for i in range(0, diskIndex):
+    #         if dstNodeName[i] == currentNode["name"][diskIndex]:
+    #             result = True
+    #     return result
+      # если на стержне для переноса есть с диск с меньшим индексом -> текущий диск перенести нельзя #FIXME: перенос большего на меньший
+    def isDiskMoveLocked(self, dstNodeName, diskIndex):
         result = False
         for i in range(0, diskIndex):
-            if dstNodeName[i] == currentNode["name"][diskIndex]:
+            if dstNodeName[i] == dstNodeName[diskIndex]:
                 result = True
         return result
 
@@ -248,16 +255,7 @@ if __name__ == "__main__":
     if returnErr == 0 and err == 0:
         graph = HanoiGraphOrder(diskCount, diskCost, order)
         graph.draw()
-
-
-# moveTest1 = [{ "dI" : 0, "rSrc" : 0, "rDst" : 1 },
-#          { "dI" : 1, "rSrc" : 0, "rDst" : 2 },
-#          { "dI" : 0, "rSrc" : 1, "rDst" : 2 },
-#          { "dI" : 2, "rSrc" : 0, "rDst" : 1 },
-#          { "dI" : 0, "rSrc" : 2, "rDst" : 0 },
-#          { "dI" : 1, "rSrc" : 2, "rDst" : 1 },
-#          { "dI" : 0, "rSrc" : 0, "rDst" : 1 }
-# ]
+        
 
 # G=nx.Graph()
 # i=1
