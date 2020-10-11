@@ -28,16 +28,16 @@ def run_order_tests(tests):
         # stage 1
         parser = txt.InputTXT()
         diskCount, column, diskCost, err = parser.ReadDisk(file)
-        if err != 0:
+        if err != "OK":
             print(TEST_PREFIX + "FAIL", end=" | ")
-            print("ReadDisk" + " -> errorcode " + str(err))
+            print("ReadDisk" + " -> " + str(err))
             test_error += 1
             continue
 
         order, sizeOrder, returnErr = parser.ReadOrder(file)
-        if returnErr != 0:
+        if returnErr != "OK":
             print(TEST_PREFIX + "FAIL", end=" | ")
-            print("ReadOrder" + " -> errorcode " + str(returnErr))
+            print("ReadOrder" + " -> " + str(returnErr))
             test_error += 1
             continue
 

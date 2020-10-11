@@ -4,20 +4,10 @@ CONST_COST   = CONST_NPARTS + 3
 CONST_COLUMN = CONST_COST + 1
 CONST_ORDER  = CONST_COST + 4
 
-class enumErr():
-    def __init__(self) -> None:
-        self.noErr        = 0
-        self.errDisk      = 1
-        self.errColumn    = 2
-        self.errOrder     = 3
-        self.errFile      = 4
-
 
 class InputTXT():
     def __init__(self) -> None:
-        self.statusErr = enumErr()
-        
-        self.returnErr = self.statusErr.noErr
+    
         self.numColumn = 0
         self.numDisk = 0
         self.buff = ''
@@ -27,11 +17,12 @@ class InputTXT():
 
     
     def ReadDisk(self,fileName) -> int:
+        self.returnErr = 'OK'
         try:
             self.f = open(fileName)
         except Exception:
-            self.returnErr = self.statusErr.errFile
-        if self.returnErr != self.statusErr.errFile:
+            self.returnErr = 'File is not exist'
+        if self.returnErr == 'OK':
             l = [line.strip() for line in self.f]
             self.f.close()
             # print(l)
@@ -45,14 +36,14 @@ class InputTXT():
                 try:
                     self.numDisk = int(self.buff)                       # Определение количества дисков
                 except ValueError:
-                    self.returnErr = self.statusErr.errDisk
+                    self.returnErr = 'Init: The disk is not a number'
 
                 self.buff = ''                                          # Обнуляем буфер
 
                 if self.numDisk > 20 or self.numDisk <= 0:
-                    self.returnErr = self.statusErr.errDisk
+                    self.returnErr = 'Init: Disk greater than the maximum or less than zero'
             else:
-                self.returnErr = self.statusErr.errFile
+                 self.returnErr = 'Err file!!!!!!!'
             if l[CONST_COST] == 'COST':  
                 self.buff = ''                                 
                 for i in range(len(l[CONST_COLUMN])):                   # Определение цены штырей и их количества
@@ -63,9 +54,9 @@ class InputTXT():
                                 self.diskCost.append(int(self.buff))
                             else:
                                 self.diskCost.append(int(self.buff))
-                                self.returnErr = self.statusErr.errColumn
+                                self.returnErr = 'Init: Rod greater than the maximum or less than zero'
                         except ValueError:
-                            self.returnErr = self.statusErr.errColumn
+                             self.returnErr = 'Init: The rod is not a number'
                         self.buff = ''
                     else:
                         self.buff = self.buff + l[CONST_COLUMN][i]
@@ -73,20 +64,20 @@ class InputTXT():
                 try:
                     self.diskCost.append(int(self.buff))
                 except ValueError:
-                    self.returnErr = self.statusErr.errColumn
+                    self.returnErr = 'Init: The rod is not a number'
 
             else:
-                self.returnErr = self.statusErr.errFile
+                 self.returnErr = 'Err file!!!!!!!'
 
             return int(self.numDisk),int(self.numColumn),self.diskCost,self.returnErr
         
     def ReadOrder(self,fileName):
-        self.returnErr = self.statusErr.noErr
+        self.returnErr = 'OK'
         try:
             self.f = open(fileName)
         except Exception:
-            self.returnErr = self.statusErr.errFile
-        if self.returnErr != self.statusErr.errFile:
+            self.returnErr = 'File is not exist'
+        if self.returnErr == 'OK':
             l = [line.strip() for line in self.f]
             self.f.close()
             # print(l)
@@ -104,9 +95,9 @@ class InputTXT():
                             try:
                                 buffOrder['dI'] = int(self.buff)
                                 if buffOrder['dI'] > self.numDisk - 1 or buffOrder['dI'] < 0:
-                                    self.returnErr = self.statusErr.errOrder
+                                    self.returnErr = 'Order: Disk greater than the maximum or less than zero'
                             except ValueError:
-                                self.returnErr = self.statusErr.errOrder
+                                self.returnErr = 'Order: The disk is not a number'
                             self.buff = ''
                             count = count + 1
                         else: 
@@ -114,9 +105,9 @@ class InputTXT():
                                 try:
                                     buffOrder['rSrc'] = int(self.buff)
                                     if buffOrder['rSrc'] > self.numColumn - 1 or buffOrder['rSrc'] < 0:
-                                        self.returnErr = self.statusErr.errOrder
+                                        self.returnErr = 'Order: Rod greater than the maximum or less than zero'
                                 except ValueError:
-                                    self.returnErr = self.statusErr.errOrder
+                                    self.returnErr = 'Order: The rod is not a number'
                                 self.buff = ''
                                 count = 1
                             else:
@@ -125,10 +116,10 @@ class InputTXT():
                     try:
                         buffOrder['rDst'] = int(self.buff)
                         if buffOrder['rDst'] > self.numColumn - 1 or buffOrder['rDst'] < 0:
-                                        self.returnErr = self.statusErr.errOrder
+                            self.returnErr = 'Order: Rod greater than the maximum or less than zero'
                         self.order.append(buffOrder)
                     except ValueError:
-                        self.returnErr = self.statusErr.errOrder  
+                        self.returnErr = 'Order: The rod is not a number'  
 
                     lineOrder = lineOrder + 1                           # Переходим на следующую линию
                 self.sizeOrder = lineOrder - CONST_ORDER-1
@@ -140,11 +131,11 @@ class InputTXT():
 if __name__ == "__main__":  
     test = InputTXT()
 
-
-    disk, column, diskCost, err = test.ReadDisk('FileInit.txt')
+    FILENAME = "tests_file/Test1.txt" 
+    disk, column, diskCost, err = test.ReadDisk(FILENAME)
     print(' Disk = ',disk,'\n','Column = ', column,'\n','Err = ', err,'\n', 'Cost', diskCost)
 
-    order,sizeOrder, returnErr = test.ReadOrder('FileInit.txt')
+    order,sizeOrder, returnErr = test.ReadOrder(FILENAME)
     print('Err = ', returnErr)
     for i in range(0, sizeOrder):
         print(' disk  = ',order[i]['dI'], 'columnFrom = ',order[i]['rSrc'], 'columnTo = ',order[i]['rDst'],'\n')
