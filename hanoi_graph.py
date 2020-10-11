@@ -4,6 +4,7 @@ import sys
 import networkx as nx
 import matplotlib.pyplot as plt 
 
+import InputTXT as parser
 # ПРИМЕРЫ:
 # for n,d in self.graph.nodes(data=True):
 #     print(n,d)
@@ -237,21 +238,25 @@ class HanoiGraphOrder():
 
 
 if __name__ == "__main__":  
-    moveTest1 = [{ "dI" : 0, "rSrc" : 0, "rDst" : 1 },
-             { "dI" : 1, "rSrc" : 0, "rDst" : 2 },
-             { "dI" : 0, "rSrc" : 1, "rDst" : 2 },
-             { "dI" : 2, "rSrc" : 0, "rDst" : 1 },
-             { "dI" : 0, "rSrc" : 2, "rDst" : 0 },
-             { "dI" : 1, "rSrc" : 2, "rDst" : 1 },
-             { "dI" : 0, "rSrc" : 0, "rDst" : 1 }
-    ]
+    parser = parser.InputTXT()
 
-    
-    graph = HanoiGraphOrder(3, [1, 2, 3], moveTest1)
-    graph.draw()
+    diskCount, column, diskCost, err = parser.ReadDisk('FileInit.txt')
+    print(' DiskCount = ',diskCount,'\n','Column = ', column,'\n','Err = ', err,'\n', 'Cost', diskCost)
+
+    order, sizeOrder, returnErr = parser.ReadOrder('FileInit.txt')
+    if returnErr == 0 and err == 0:
+        graph = HanoiGraphOrder(diskCount, diskCost, order)
+        graph.draw()
 
 
-
+# moveTest1 = [{ "dI" : 0, "rSrc" : 0, "rDst" : 1 },
+#          { "dI" : 1, "rSrc" : 0, "rDst" : 2 },
+#          { "dI" : 0, "rSrc" : 1, "rDst" : 2 },
+#          { "dI" : 2, "rSrc" : 0, "rDst" : 1 },
+#          { "dI" : 0, "rSrc" : 2, "rDst" : 0 },
+#          { "dI" : 1, "rSrc" : 2, "rDst" : 1 },
+#          { "dI" : 0, "rSrc" : 0, "rDst" : 1 }
+# ]
 
 # G=nx.Graph()
 # i=1

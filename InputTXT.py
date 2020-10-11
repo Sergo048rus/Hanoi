@@ -137,13 +137,14 @@ class InputTXT():
   
 
 
-test = InputTXT()
-
-
-disk, column, diskCost, err = test.ReadDisk('FileInit.txt')
-print(' Disk = ',disk,'\n','Column = ', column,'\n','Err = ', err,'\n', 'Cost', diskCost)
-
-order,sizeOrder, returnErr = test.ReadOrder('FileInit.txt')
-print('Err = ', returnErr)
-for i in range(0, sizeOrder):
-    print(' disk  = ',order[i]['dI'], 'columnFrom = ',order[i]['rSrc'], 'columnTo = ',order[i]['rDst'],'\n')
+if __name__ == "__main__":  
+    test = InputTXT()
+    
+    
+    disk, column, diskCost, err = test.ReadDisk('FileInit.txt')
+    print(' Disk = ',disk,'\n','Column = ', column,'\n','Err = ', err,'\n', 'Cost', diskCost)
+    
+    order,sizeOrder, returnErr = test.ReadOrder('FileInit.txt')
+    print('Err = ', returnErr)
+    for i in range(0, sizeOrder):
+        print(' disk  = ',order[i]['dI'], 'columnFrom = ',order[i]['rSrc'], 'columnTo = ',order[i]['rDst'],'\n')
