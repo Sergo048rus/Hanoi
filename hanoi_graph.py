@@ -160,56 +160,58 @@ class HanoiGraphOrder():
         self.rodCount = len(rodCostList)
         self.rodCost = rodCostList
 
-        self.plotMoveOrder(moveOrderList)
+        self.orderCost = 0
+        self.status = self.plotMoveOrder(moveOrderList)
 
     # 1. нет такого диска +
     # 2. нет такого штыря +
     # 3. штыри совпадают  +
     # 4. дублирующийся ход
     # остальные проверки как у HanoiGraph
+    # возвращает сообщение ошибки, либо "OK"
     def plotMoveOrder(self, moveOrderList):
         i = 0
         prevNodeName = str("0" * self.diskCount)
 
         for move in moveOrderList:
-            print(self.PRINT_PREFIX + "Move {0} = {1}".format(i,move))
+            # print(self.PRINT_PREFIX + "Move {0} = {1}".format(i,move))
             i += 1
 
             if move["dI"] > self.diskCount or move["dI"] < 0:
-                print(self.PRINT_PREFIX + "Invalid disk number #{i}".format(i=move["dI"]))
-                return 
+                # print(self.PRINT_PREFIX + "Invalid disk number #{i}".format(i=move["dI"]))
+                return "Invalid disk number #{i}".format(i=move["dI"])
 
             if not move["rSrc"] in self.rodRange:
-                print(self.PRINT_PREFIX + "Invalid src rod number #{i}".format(i=move["rSrc"]))
-                return
+                # print(self.PRINT_PREFIX + "Invalid src rod number #{i}".format(i=move["rSrc"]))
+                return "Invalid src rod number #{i}".format(i=move["rSrc"])
 
             if not move["rDst"] in self.rodRange:
-                print(self.PRINT_PREFIX + "Invalid dst rod number #{i}".format(i=move["rDst"]))
-                return
+                # print(self.PRINT_PREFIX + "Invalid dst rod number #{i}".format(i=move["rDst"]))
+                return "Invalid dst rod number #{i}".format(i=move["rDst"])
 
             if move["rSrc"] == move["rDst"]:
-                print(self.PRINT_PREFIX + "Duplicate {0} {1} {2}".format(move["dI"], move["rSrc"], move["rDst"]))
-                return
+                # print(self.PRINT_PREFIX + "Duplicate {0} {1} {2}".format(move["dI"], move["rSrc"], move["rDst"]))
+                return "Duplicate {0} {1} {2}".format(move["dI"], move["rSrc"], move["rDst"])
 
             # формируем название ноды, где dI - индекс в строке, rSrc - тек. значение, rDst - новое значение
             # проверяем, что есть такая нода, где в dI есть rSrc
             dstNodeName = prevNodeName
             if dstNodeName[move["dI"]] != str(move["rSrc"]):
                 invalid_node = dstNodeName[:move["dI"]] + str(move["rSrc"]) + dstNodeName[move["dI"]+1:]
-                print(self.PRINT_PREFIX + "Node [{0}] does not exist!".format(invalid_node))
-                return
+                # print(self.PRINT_PREFIX + "Node [{0}] does not exist!".format(invalid_node))
+                return "Node [{0}] does not exist!".format(invalid_node)
 
             # с названием ноды все ОК, пытаемся добавиться
             dstNodeName = dstNodeName[:move["dI"]] + str(move["rDst"]) + dstNodeName[move["dI"]+1:]
 
 
             if self.isDiskLocked(self.graph.nodes[prevNodeName], move["dI"]):
-                print(self.PRINT_PREFIX + "Disk locked {0}".format(move))
-                return
+                # print(self.PRINT_PREFIX + "Disk locked {0}".format(move))
+                return "Disk locked {0}".format(move)
 
             if self.isDiskMoveLocked(dstNodeName, move["dI"]):
-                print(self.PRINT_PREFIX + "Disk move lock {0}".format(move))
-                return
+                # print(self.PRINT_PREFIX + "Disk move lock {0}".format(move))
+                return "Disk move lock {0}".format(move)
 
             self.graph.add_node(dstNodeName,    color=self.ORDINARY_NODE_COLOR, 
                                                 weight=self.rodCost[move["rDst"]],
@@ -218,6 +220,9 @@ class HanoiGraphOrder():
             self.graph.add_edge(prevNodeName, dstNodeName, weight=self.rodCost[move["rDst"]])
 
             prevNodeName = dstNodeName
+            self.orderCost += self.rodCost[move["rDst"]] # считаем цену/вес
+
+        return "OK"
 
     # если есть диск с меньшим индексом на том же кольце -> текущий диск заблокирован
     def isDiskLocked(self, currentNode, diskIndex):
@@ -255,7 +260,7 @@ if __name__ == "__main__":
     if returnErr == 0 and err == 0:
         graph = HanoiGraphOrder(diskCount, diskCost, order)
         graph.draw()
-        
+
 
 # G=nx.Graph()
 # i=1

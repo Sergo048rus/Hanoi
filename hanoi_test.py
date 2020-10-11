@@ -29,21 +29,24 @@ def run_order_tests(tests):
         parser = txt.InputTXT()
         diskCount, column, diskCost, err = parser.ReadDisk(file)
         if err != 0:
-            print(TEST_PREFIX + "FAIL")
-            print(TEST_PREFIX + "ReadDisk" + str(file) + " -> errorcode " + str(err))
+            print(TEST_PREFIX + "FAIL", end=" | ")
+            print("ReadDisk" + " -> errorcode " + str(err))
             test_error += 1
             continue
 
         order, sizeOrder, returnErr = parser.ReadOrder(file)
         if returnErr != 0:
-            print(TEST_PREFIX + "FAIL")
-            print(TEST_PREFIX + "ReadOrder" + str(file) + " -> errorcode " + str(err))
+            print(TEST_PREFIX + "FAIL", end=" | ")
+            print("ReadOrder" + " -> errorcode " + str(returnErr))
             test_error += 1
             continue
 
-            # if returnErr == 0 and err == 0:
-            #     graph = HanoiGraphOrder(diskCount, diskCost, order)
-            #     graph.draw()
+        graph = grapher.HanoiGraphOrder(diskCount, diskCost, order)
+        if graph.status != "OK":
+            print(TEST_PREFIX + "FAIL", end=" | ")
+            print("graph error -> " + str(graph.status))
+            test_error += 1
+            continue
 
         print(TEST_PREFIX + "OK")
         test_ok += 1
@@ -59,6 +62,6 @@ if __name__ == "__main__":
         print(TEST_PREFIX + "No files found!")
     else:
         ok, err = run_order_tests(filelist)
-        print("TOTAL: {0} OK, {1} FAILED, {2} TESTED".format(ok,err,len(filelist)))
+        print(TEST_PREFIX + "TOTAL: {0} OK, {1} FAILED, {2} TESTED".format(ok,err,len(filelist)))
     
     print("*** HANOI TEST FINISHED ***")
