@@ -200,7 +200,7 @@ class HanoiGraphOrder():
                 print(self.PRINT_PREFIX + "Disk locked {0}".format(move))
                 return
 
-            if self.isDiskMoveLocked(self.graph.nodes[prevNodeName], dstNodeName, move["dI"]):
+            if self.isDiskMoveLocked(dstNodeName, move["dI"]):
                 print(self.PRINT_PREFIX + "Disk move lock {0}".format(move))
                 return
 
@@ -212,7 +212,7 @@ class HanoiGraphOrder():
 
             prevNodeName = dstNodeName
 
-        # если есть диск с меньшим индексом на том же кольце -> текущий диск заблокирован
+    # если есть диск с меньшим индексом на том же кольце -> текущий диск заблокирован
     def isDiskLocked(self, currentNode, diskIndex):
         result = False
         for i in range(0, diskIndex):
@@ -220,11 +220,11 @@ class HanoiGraphOrder():
                 result = True
         return result
             
-    # если на стержне для переноса есть с диск с меньшим индексом -> текущий диск перенести нельзя 
-    def isDiskMoveLocked(self, currentNode, dstNodeName, diskIndex):
+    # если на стержне для переноса есть с диск с меньшим индексом -> текущий диск перенести нельзя #FIXME: перенос большего на меньший
+    def isDiskMoveLocked(self, dstNodeName, diskIndex):
         result = False
         for i in range(0, diskIndex):
-            if dstNodeName[i] == currentNode["name"][diskIndex]:
+            if dstNodeName[i] == dstNodeName[diskIndex]:
                 result = True
         return result
             
@@ -236,14 +236,15 @@ class HanoiGraphOrder():
 
 
 
-
-if __name__ == "__main__":  
+#FIXME: пофиксить ошибку OGRAPH в основном графе
+if __name__ == "__main__": 
+    FILENAME = "tests_file/t3-1.txt" 
     parser = parser.InputTXT()
 
-    diskCount, column, diskCost, err = parser.ReadDisk('FileInit.txt')
+    diskCount, column, diskCost, err = parser.ReadDisk(FILENAME)
     print(' DiskCount = ',diskCount,'\n','Column = ', column,'\n','Err = ', err,'\n', 'Cost', diskCost)
 
-    order, sizeOrder, returnErr = parser.ReadOrder('FileInit.txt')
+    order, sizeOrder, returnErr = parser.ReadOrder(FILENAME)
     if returnErr == 0 and err == 0:
         graph = HanoiGraphOrder(diskCount, diskCost, order)
         graph.draw()
