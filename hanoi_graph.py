@@ -148,7 +148,8 @@ class HanoiGraphOrder():
     ROOT_NODE_COLOR = '#b41f1f'
     ORDINARY_NODE_COLOR = '#1f78b4'
 
-    def __init__(self, diskCount, rodCostList, moveOrderList):
+    def __init__(self, diskCount, rodCostList, moveOrderList, debugLevel=1):
+        self.DEBUG_LEVEL = debugLevel
         self.graph = nx.DiGraph() 
         self.graph.add_node(str("0" * diskCount), color=self.ROOT_NODE_COLOR, # "корень" = начальное состояние
                                                 weight=rodCostList[0],
@@ -163,6 +164,10 @@ class HanoiGraphOrder():
         self.orderCost = 0
         self.status = self.plotMoveOrder(moveOrderList)
 
+    def DEBUG_PRINT(self, dstr):
+        if self.DEBUG_LEVEL == 0: 
+            print(self.PRINT_PREFIX + str(dstr))
+
     # 1. нет такого диска +
     # 2. нет такого штыря +
     # 3. штыри совпадают  +
@@ -174,23 +179,23 @@ class HanoiGraphOrder():
         prevNodeName = str("0" * self.diskCount)
 
         for move in moveOrderList:
-            # print(self.PRINT_PREFIX + "Move {0} = {1}".format(i,move))
+            self.DEBUG_PRINT("Move {0} = {1}".format(i,move))
             i += 1
 
             if move["dI"] > self.diskCount or move["dI"] < 0:
-                # print(self.PRINT_PREFIX + "Invalid disk number #{i}".format(i=move["dI"]))
+                self.DEBUG_PRINT("Invalid disk number #{i}".format(i=move["dI"]))
                 return "Invalid disk number #{i}".format(i=move["dI"])
 
             if not move["rSrc"] in self.rodRange:
-                # print(self.PRINT_PREFIX + "Invalid src rod number #{i}".format(i=move["rSrc"]))
+                self.DEBUG_PRINT("Invalid src rod number #{i}".format(i=move["rSrc"]))
                 return "Invalid src rod number #{i}".format(i=move["rSrc"])
 
             if not move["rDst"] in self.rodRange:
-                # print(self.PRINT_PREFIX + "Invalid dst rod number #{i}".format(i=move["rDst"]))
+                self.DEBUG_PRINT("Invalid dst rod number #{i}".format(i=move["rDst"]))
                 return "Invalid dst rod number #{i}".format(i=move["rDst"])
 
             if move["rSrc"] == move["rDst"]:
-                # print(self.PRINT_PREFIX + "Duplicate {0} {1} {2}".format(move["dI"], move["rSrc"], move["rDst"]))
+                self.DEBUG_PRINT("Duplicate {0} {1} {2}".format(move["dI"], move["rSrc"], move["rDst"]))
                 return "Duplicate {0} {1} {2}".format(move["dI"], move["rSrc"], move["rDst"])
 
             # формируем название ноды, где dI - индекс в строке, rSrc - тек. значение, rDst - новое значение
@@ -198,7 +203,7 @@ class HanoiGraphOrder():
             dstNodeName = prevNodeName
             if dstNodeName[move["dI"]] != str(move["rSrc"]):
                 invalid_node = dstNodeName[:move["dI"]] + str(move["rSrc"]) + dstNodeName[move["dI"]+1:]
-                # print(self.PRINT_PREFIX + "Node [{0}] does not exist!".format(invalid_node))
+                self.DEBUG_PRINT("Node [{0}] does not exist!".format(invalid_node))
                 return "Node [{0}] does not exist!".format(invalid_node)
 
             # с названием ноды все ОК, пытаемся добавиться
@@ -206,11 +211,11 @@ class HanoiGraphOrder():
 
 
             if self.isDiskLocked(self.graph.nodes[prevNodeName], move["dI"]):
-                # print(self.PRINT_PREFIX + "Disk locked {0}".format(move))
+                self.DEBUG_PRINT("Disk locked {0}".format(move))
                 return "Disk locked {0}".format(move)
 
             if self.isDiskMoveLocked(dstNodeName, move["dI"]):
-                # print(self.PRINT_PREFIX + "Disk move lock {0}".format(move))
+                self.DEBUG_PRINT("Disk move lock {0}".format(move))
                 return "Disk move lock {0}".format(move)
 
             self.graph.add_node(dstNodeName,    color=self.ORDINARY_NODE_COLOR, 
@@ -239,38 +244,40 @@ class HanoiGraphOrder():
             if dstNodeName[i] == dstNodeName[diskIndex]:
                 result = True
         return result
-            
 
+    # XXX: https://networkx.github.io/documentation/stable/reference/drawing.html#module-networkx.drawing.layout
+    def layoutNodes(self): # positions for all nodes 
+        return nx.spring_layout(self.graph)
+        # return nx.bipartite_layout(self.graph, self.graph.nodes)
+        # return nx.circular_layout(self.graph)
+        # return nx.kamada_kawai_layout(self.graph)
+        # return nx.planar_layout(self.graph)
+        # return nx.shell_layout(self.graph)
+        # return nx.spectral_layout(self.graph)
+           
     def draw(self):
-        plt.figure(figsize=(8,8))
-        nx.draw(self.graph, with_labels=True) 
-        plt.show() 
+        plt.figure(figsize=(7,7))
+        pos = self.layoutNodes()
+        nx.draw_networkx_nodes(self.graph, pos)                 # nodes [node_size=700]
+        nx.draw_networkx_labels(self.graph, pos)
 
+        labels = nx.get_edge_attributes(self.graph, 'weight')   # edge labels
+        nx.draw_networkx_edges(self.graph, pos)
+        nx.draw_networkx_edge_labels(self.graph, pos=pos, edge_labels=labels)
+        
+        # plt.axis("off")
+        plt.show() 
 
 
 #FIXME: пофиксить ошибку OGRAPH в основном графе
 if __name__ == "__main__": 
-    FILENAME = "tests_file/t3-1.txt" 
+    FILENAME = "tests_file/t4.txt" 
     parser = parser.InputTXT()
 
     diskCount, column, diskCost, err = parser.ReadDisk(FILENAME)
     print(' DiskCount = ',diskCount,'\n','Column = ', column,'\n','Err = ', err,'\n', 'Cost', diskCost)
 
     order, sizeOrder, returnErr = parser.ReadOrder(FILENAME)
-    if returnErr == 0 and err == 0:
-        graph = HanoiGraphOrder(diskCount, diskCost, order)
+    if returnErr == 'OK' and err == 'OK':
+        graph = HanoiGraphOrder(diskCount, diskCost, order, debugLevel=1)
         graph.draw()
-
-
-# G=nx.Graph()
-# i=1
-# G.add_node(i,pos=(i,i))
-# G.add_node(2,pos=(2,2))
-# G.add_node(3,pos=(1,0))
-# G.add_edge(1,2,weight=0.5)
-# G.add_edge(1,3,weight=9.8)
-# pos=nx.get_node_attributes(G,'pos')
-# nx.draw(G,pos,with_labels=True)
-# labels = nx.get_edge_attributes(G,'weight')
-# nx.draw_networkx_edge_labels(G,pos,edge_labels=labels)
-# plt.show() 
