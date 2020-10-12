@@ -22,7 +22,7 @@ def run_order_tests(tests):
     test_error = 0
 
     for file in filelist:
-        print(TEST_PREFIX + "Run test #{0} {1}".format(i,str(file)))
+        print("\n" + TEST_PREFIX + "Run test #{0} {1}".format(i,str(file)))
         i += 1
 
         # stage 1
