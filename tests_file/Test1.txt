@@ -2,9 +2,131 @@ INIT
 NPARTS 00000000000000000000000000000000000000000000000000000000000000000000000000000000000003
 /
 
+-- тоже типа комент
+МДАААААААААААААА ВОТ ЭТО 
+Типа комент
+
+comm
+
+-commmmmmeeeeeeeeeeeeeeeeeeeeeeeeeeeent
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 COST
 1 1 1 
 /
+
+
+
+
+
+
+-- тоже типа комент
+МДАААААААААААААА ВОТ ЭТО 
+Типа комент
+
+comm
+
+-commmmmmeeeeeeeeeeeeeeeeeeeeeeeeeeeent
+
+
+
+
+
+
+
+
+
+-- тоже типа комент
+МДАААААААААААААА ВОТ ЭТО 
+Типа комент
+
+comm
+
+-commmmmmeeeeeeeeeeeeeeeeeeeeeeeeeeeent-- тоже типа комент
+МДАААААААААААААА ВОТ ЭТО 
+Типа комент
+
+comm
+
+-commmmmmeeeeeeeeeeeeeeeeeeeeeeeeeeeent
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ORDER
 0 0 1
@@ -15,3 +137,84 @@ ORDER
 1 2 1
 0 0 1
 /
+
+
+-- тоже типа комент
+МДАААААААААААААА ВОТ ЭТО 
+Типа комент
+
+comm
+
+-commmmmmeeeeeeeeeeeeeeeeeeeeeeeeeeeent-- тоже типа комент
+МДАААААААААААААА ВОТ ЭТО 
+Типа комент
+
+comm
+
+-commmmmmeeeeeeeeeeeeeeeeeeeeeeeeeeeent-- тоже типа комент
+МДАААААААААААААА ВОТ ЭТО 
+Типа комент
+
+comm
+
+-commmmmmeeeeeeeeeeeeeeeeeeeeeeeeeeeent-- тоже типа комент
+МДАААААААААААААА ВОТ ЭТО 
+Типа комент
+
+comm
+
+-commmmmmeeeeeeeeeeeeeeeeeeeeeeeeeeeent-- тоже типа комент
+МДАААААААААААААА ВОТ ЭТО 
+Типа комент
+
+comm
+
+-commmmmmeeeeeeeeeeeeeeeeeeeeeeeeeeeent-- тоже типа комент
+МДАААААААААААААА ВОТ ЭТО 
+Типа комент
+
+comm
+
+-commmmmmeeeeeeeeeeeeeeeeeeeeeeeeeeeent-- тоже типа комент
+МДАААААААААААААА ВОТ ЭТО 
+Типа комент
+
+comm
+
+-commmmmmeeeeeeeeeeeeeeeeeeeeeeeeeeeent-- тоже типа комент
+МДАААААААААААААА ВОТ ЭТО 
+Типа комент
+
+comm
+
+-commmmmmeeeeeeeeeeeeeeeeeeeeeeeeeeeent-- тоже типа комент
+МДАААААААААААААА ВОТ ЭТО 
+Типа комент
+
+comm
+
+-commmmmmeeeeeeeeeeeeeeeeeeeeeeeeeeeent-- тоже типа комент
+МДАААААААААААААА ВОТ ЭТО 
+Типа комент
+
+comm
+
+-commmmmmeeeeeeeeeeeeeeeeeeeeeeeeeeeent-- тоже типа комент
+МДАААААААААААААА ВОТ ЭТО 
+Типа комент
+
+comm
+
+-commmmmmeeeeeeeeeeeeeeeeeeeeeeeeeeeent-- тоже типа комент
+МДАААААААААААААА ВОТ ЭТО 
+Типа комент
+
+comm
+
+-commmmmmeeeeeeeeeeeeeeeeeeeeeeeeeeeent-- тоже типа комент
+МДАААААААААААААА ВОТ ЭТО 
+Типа комент
+
+comm
+
+-commmmmmeeeeeeeeeeeeeeeeeeeeeeeeeeeent
