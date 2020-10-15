@@ -39,7 +39,7 @@ jobs:
       run: |
         rm -f test_results.txt
         python hanoi_test_order.py > test_results.txt
-        echo "TEST DATE: ${{ steps.date.outputs.date }}" >> <filename>
+        echo "TEST DATE: ${{ steps.date.outputs.date }}" >> test_results.txt
         less test_results.txt
         
     - name: Push test results
