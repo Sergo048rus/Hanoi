@@ -146,5 +146,5 @@ if __name__ == "__main__":
     order, sizeOrder, returnErr = parser.ReadOrder(FILENAME)
     if returnErr == 'OK' and err == 'OK':
         graph = HanoiGraphOrder(diskCount, diskCost, order, debugLevel=1)
-        print(graph.orderCost)
+        print("Total cost: {0}".format(graph.orderCost))
         graph.draw()

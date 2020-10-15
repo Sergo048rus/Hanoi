@@ -1,0 +1,59 @@
+name: Ubuntu-Graph-Order-Test
+
+on:
+  workflow_dispatch:
+    inputs:
+      userVar:
+        description: 'Забей на это поле'
+        required: false
+        default: 'sym_gen_console.py'
+
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python 3.8.6
+      uses: actions/setup-python@v1
+      with:
+        python-version: 3.8.6
+    - name: Install dependencies
+      run: |
+        echo "====================="
+        echo "STARTING TEST ACTION SCRIPT"
+        echo "Input arg: ${{ github.event.inputs.userVar }}"
+        echo "====================="
+        python -m pip install --upgrade pip
+        pip install networkx
+        pip install matplotlib
+        echo "ALL PACKAGES ARE INSTALLED"
+        
+    - name: Get current date
+      id: date
+      run: echo "::set-output name=date::$(date +'%Y-%m-%dT%H:%M:%S')"
+    
+    - name: RUNNING TESTS # ${{ github.event.inputs.pathToScriptRepo }}
+      run: |
+        rm -f test_results.txt
+        python hanoi_test_order.py > test_results.txt
+        echo "TEST DATE: ${{ steps.date.outputs.date }}" >> test_results.txt
+        less test_results.txt
+        
+    - name: Push test results
+      run: |
+        git config user.name github-actions
+        git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+        git add .
+        git commit -m "AUTO: test results ${{ steps.date.outputs.date }}"
+        git push origin main  
+        
+  # git config user.name ${{ secrets.GH_USER }}
+  # git config user.email "${{ secrets.GH_MAIL }}"
+   
+   # - uses: actions/upload-artifact@v2
+    #  with:
+     #   name: Upload results to artifacts
+      #  path: ./exe-out # or path/to/artifact
