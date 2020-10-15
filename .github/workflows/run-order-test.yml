@@ -1,0 +1,39 @@
+name: Win-PyQtGraph-NumPy-SymPy
+
+on:
+  workflow_dispatch:
+    inputs:
+      userVar:
+        description: 'Забей на это поле'
+        required: false
+        default: 'sym_gen_console.py'
+
+
+jobs:
+  build:
+
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Set up Python 3.8.5
+      uses: actions/setup-python@v1
+      with:
+        python-version: 3.8.5
+    - name: Install dependencies
+      run: |
+        echo "====================="
+        echo "STARTING TEST ACTION SCRIPT"
+        echo "Input arg: ${{ github.event.inputs.userVar }}"
+        echo "====================="
+        python -m pip install --upgrade pip
+        pip install networkx
+        echo "ALL PACKAGES ARE INSTALLED"
+    - name: Start running test # ${{ github.event.inputs.pathToScriptRepo }}
+      run: |
+        python hanoi_test_order.py
+        
+   # - uses: actions/upload-artifact@v2
+    #  with:
+     #   name: Upload results to artifacts
+      #  path: ./exe-out # or path/to/artifact
