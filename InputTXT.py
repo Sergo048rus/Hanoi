@@ -37,7 +37,7 @@ class InputTXT():
             self.line = self.line + 1
 
         except IndexError:
-             self.returnErr = 'Err file!!!!!!!2'
+             self.returnErr = 'Err file!!!!!!!'
         
         self.__Check_COST(l)                    # Вызываем следующий этап проверки
     
@@ -46,9 +46,11 @@ class InputTXT():
             while l[self.line] != 'COST':             
                 self.line = self.line + 1
 
-            self.buff = ''                                 
-            for i in range(len(l[self.line + 1])):                   # Определение цены штырей и их количества
-                if l[self.line + 1][i] == ' ':
+            self.buff = ''    
+            self.line = self.line + 1
+
+            for i in range(len(l[self.line])):                   # Определение цены штырей и их количества
+                if l[self.line][i] == ' ':
                     self.numColumn = self.numColumn + 1
                     try:
                         if int(self.buff) > 0:
@@ -60,7 +62,7 @@ class InputTXT():
                         self.returnErr = 'Init: The rod is not a number'
                     self.buff = ''
                 else:
-                    self.buff = self.buff + l[self.line + 1][i]
+                    self.buff = self.buff + l[self.line][i]
             self.numColumn = self.numColumn + 1                      # Добавляем последнее значение
             try:
                 self.diskCost.append(int(self.buff))
@@ -69,9 +71,33 @@ class InputTXT():
 
             self.line = self.line + 1
         except IndexError:
-            self.returnErr = 'Err file!!!!!!!4'
+            self.returnErr = 'Err file!!!!!!!'
             
+    def __RemoveCommentAndSpace(self, l):
+            while l.count('') != 0:
+                l.remove('')
 
+            for line in l:
+                if len(line) > 2:
+                    if line[0] == '-' and line[0] == '-':
+                        l.remove(line)
+            # print(l)
+
+            
+            for j in range(len(l)):
+                buff_l = ''
+                for i in range(len(l[j].split())):
+                    if len(l[j].split()[i]) > 2:
+                        if l[j].split()[i][0] == '-' and l[j].split()[i][1] == '-':
+                            for k in range(i):
+                                if k == i-1:
+                                    buff_l = buff_l + l[j].split()[k] + ''
+                                else:
+                                    buff_l = buff_l + l[j].split()[k] + ' '
+        
+                            l[j] = buff_l
+
+            return l
     def ReadDisk(self,fileName) -> int:
         self.returnErr = 'OK'
         try:
@@ -81,14 +107,14 @@ class InputTXT():
         if self.returnErr == 'OK':
             l = [line.strip() for line in self.f]
             self.f.close()
-            
-            while l.count('') != 0:
-                l.remove('')
+
+            l =self.__RemoveCommentAndSpace(l)
  
             self.__Check_NPARTS(l)
             
             return int(self.numDisk),int(self.numColumn),self.diskCost,self.returnErr
         
+    
 
     def __checkOrder(self,l):
         while l[self.line] != 'ORDER':             
@@ -147,8 +173,8 @@ class InputTXT():
             l = [line.strip() for line in self.f]
             self.f.close()
             # print(l)
-            while l.count('') != 0:
-                l.remove('')
+
+            l =self.__RemoveCommentAndSpace(l)
 
             self.__checkOrder(l)
  
@@ -161,7 +187,7 @@ if __name__ == "__main__":
 
     test = InputTXT()
 
-    FILENAME = "tests_file/Test1.txt" 
+    FILENAME = "tests_file/oks_t2.txt" 
     disk, column, diskCost, err = test.ReadDisk(FILENAME)
     print(' Disk = ',disk,'\n','Column = ', column,'\n','Err = ', err,'\n', 'Cost', diskCost)
 
