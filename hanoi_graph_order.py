@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import InputTXT as parser
 
 class HanoiGraphOrder():
-    ''' аналог HanoiGraph, но стороит существующий ORDER\n
+    ''' аналог HanoiGraph, но строит существующий ORDER\n
         реализованы все проверки кроме специфичных для HanoiGraph\n
         формат хода: moveOrder = { "dI" : 0, "rSrc" : 0, "rDst" : 1 }
     '''
@@ -146,4 +146,5 @@ if __name__ == "__main__":
     order, sizeOrder, returnErr = parser.ReadOrder(FILENAME)
     if returnErr == 'OK' and err == 'OK':
         graph = HanoiGraphOrder(diskCount, diskCost, order, debugLevel=1)
+        print(graph.orderCost)
         graph.draw()
