@@ -47,7 +47,7 @@ jobs:
          
     - name: Push test results
       run: |
-        
+        git pull origin main
         git add test_results.txt
         git commit -m "AUTO: test results ${{ steps.date.outputs.date }}"
         git push origin main    
