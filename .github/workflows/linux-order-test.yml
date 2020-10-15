@@ -1,4 +1,4 @@
-name: Run-Graph-Order-Test
+name: Ubuntu-Graph-Order-Test
 
 on:
   workflow_dispatch:
@@ -12,7 +12,7 @@ on:
 jobs:
   build:
 
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v1
@@ -30,10 +30,22 @@ jobs:
         pip install networkx
         pip install matplotlib
         echo "ALL PACKAGES ARE INSTALLED"
+        
     - name: Start running test # ${{ github.event.inputs.pathToScriptRepo }}
       run: |
-        python hanoi_test_order.py
+        python hanoi_test_order.py > test_results.txt
         
+    - name: Get current date
+      id: date
+      run: echo "::set-output name=date::$(date +'%Y-%m-%dT%H:%M:%S')"
+            
+    - name: Push test results
+      run: |
+        git config user.name ${{ secrets.GH_USER }}
+        git config user.email "${{ secrets.GH_MAIL }}"
+        git add test_results.txt
+        git commit -am "AUTO: test results ${{ steps.date.outputs.date }}"
+        git push origin main    
    # - uses: actions/upload-artifact@v2
     #  with:
      #   name: Upload results to artifacts
