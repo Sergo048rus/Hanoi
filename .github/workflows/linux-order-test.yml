@@ -38,14 +38,23 @@ jobs:
     - name: Get current date
       id: date
       run: echo "::set-output name=date::$(date +'%Y-%m-%dT%H:%M:%S')"
-            
+      
+    - name: Setup git config
+      run: |
+          # setup the username and email. I tend to use 'GitHub Actions Bot' with no email by default
+          git config user.name "GitHub Actions Bot"
+          git config user.email "<>"
+         
     - name: Push test results
       run: |
-        git config user.name ${{ secrets.GH_USER }}
-        git config user.email "${{ secrets.GH_MAIL }}"
+        
         git add test_results.txt
-        git commit -am "AUTO: test results ${{ steps.date.outputs.date }}"
+        git commit -m "AUTO: test results ${{ steps.date.outputs.date }}"
         git push origin main    
+        
+  # git config user.name ${{ secrets.GH_USER }}
+  # git config user.email "${{ secrets.GH_MAIL }}"
+   
    # - uses: actions/upload-artifact@v2
     #  with:
      #   name: Upload results to artifacts
