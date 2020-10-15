@@ -31,8 +31,9 @@ jobs:
         pip install matplotlib
         echo "ALL PACKAGES ARE INSTALLED"
         
-    - name: Start running test # ${{ github.event.inputs.pathToScriptRepo }}
+    - name: RUNNING TESTS # ${{ github.event.inputs.pathToScriptRepo }}
       run: |
+        rm -f test_results.txt
         python hanoi_test_order.py > test_results.txt
         less test_results.txt
         
