@@ -48,7 +48,7 @@ def run_order_tests(tests):
             test_error += 1
             continue
 
-        print(TEST_PREFIX + "OK")
+        print(TEST_PREFIX + "OK | Cost: " + str(graph.orderCost))
         test_ok += 1
 
     return test_ok, test_error
