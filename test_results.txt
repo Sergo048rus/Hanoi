@@ -13,7 +13,7 @@
 [HTEST]: OK | Cost: 34
 
 [HTEST]: Run test #4 tests_file/oks_t3.txt
-[HTEST]: FAIL | ReadDisk -> Init: The rod is not a number
+[HTEST]: OK | Cost: 19
 
 [HTEST]: Run test #5 tests_file/t3-1.txt
 [HTEST]: FAIL | graph error -> Disk move lock {'dI': 1, 'rSrc': 0, 'rDst': 2}
@@ -22,7 +22,7 @@
 [HTEST]: FAIL | ReadDisk -> Err file!!!!!!!
 
 [HTEST]: Run test #7 tests_file/oks_t6.txt
-[HTEST]: FAIL | ReadOrder -> Order: The disk is not a number
+[HTEST]: FAIL | ReadOrder -> Order: Rod greater than the maximum or less than zero
 
 [HTEST]: Run test #8 tests_file/oks_t8.txt
 [HTEST]: OK | Cost: 19
@@ -42,23 +42,26 @@
 [HTEST]: Run test #13 tests_file/t4-1.txt
 [HTEST]: OK | Cost: 34
 
-[HTEST]: Run test #14 tests_file/t3-3.txt
-[HTEST]: OK | Cost: 8
-
-[HTEST]: Run test #15 tests_file/oks_t5.txt
+[HTEST]: Run test #14 tests_file/oks_t11.txt
 [HTEST]: OK | Cost: 19
 
-[HTEST]: Run test #16 tests_file/oks_t4.txt
-[HTEST]: FAIL | ReadDisk -> Init: Disk greater than the maximum or less than zero
+[HTEST]: Run test #15 tests_file/t3-3.txt
+[HTEST]: OK | Cost: 8
 
-[HTEST]: Run test #17 tests_file/oks_t9.txt
+[HTEST]: Run test #16 tests_file/oks_t5.txt
+[HTEST]: OK | Cost: 19
+
+[HTEST]: Run test #17 tests_file/oks_t4.txt
+[HTEST]: FAIL | ReadDisk -> Err file!!!!!!!
+
+[HTEST]: Run test #18 tests_file/oks_t9.txt
 [HTEST]: FAIL | ReadOrder -> Order: The rod is not a number
 
-[HTEST]: Run test #18 tests_file/t3-2.txt
+[HTEST]: Run test #19 tests_file/t3-2.txt
 [HTEST]: FAIL | graph error -> Disk move lock {'dI': 2, 'rSrc': 0, 'rDst': 2}
 
-[HTEST]: Run test #19 tests_file/t2.txt
+[HTEST]: Run test #20 tests_file/t2.txt
 [HTEST]: FAIL | ReadOrder -> Order: Rod greater than the maximum or less than zero
-[HTEST]: TOTAL: 10 OK, 10 FAILED, 20 TESTED
+[HTEST]: TOTAL: 12 OK, 9 FAILED, 21 TESTED
 *** HANOI TEST FINISHED ***
-TEST DATE: 2020-10-16T22:34:10
+TEST DATE: 2020-10-17T18:34:41
