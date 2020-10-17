@@ -83,20 +83,14 @@ class InputTXT():
                         l.remove(line)
             # print(l)
 
-            
-            for j in range(len(l)):
-                buff_l = ''
-                for i in range(len(l[j].split())):
-                    if len(l[j].split()[i]) > 2:
-                        if l[j].split()[i][0] == '-' and l[j].split()[i][1] == '-':
-                            for k in range(i):
-                                if k == i-1:
-                                    buff_l = buff_l + l[j].split()[k] + ''
-                                else:
-                                    buff_l = buff_l + l[j].split()[k] + ' '
-        
-                            l[j] = buff_l
+            try:
+                for j in range(len(l)):
+                    l[j] = l[j].split(' --')[0]
 
+                for j in range(len(l)):
+                    l[j] = l[j].split('--')[0]
+            except Exception:
+                 self.returnErr = 'Err file!!!!!!!'
             return l
     def ReadDisk(self,fileName) -> int:
         self.returnErr = 'OK'

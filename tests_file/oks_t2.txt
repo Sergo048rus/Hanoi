@@ -3,11 +3,11 @@ NPARTS 4
 /
 
 COST
-1 2 4 1 --dsfsdfsdf
+1 2 4 1--dsfsdfsdf
 /
 
 ORDER
-0 0 3 --54154
+0 0 3 -- комент тут
 1 0 2
 0 3 2
 2 0 3
