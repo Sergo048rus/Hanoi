@@ -53,7 +53,7 @@ class InputTXT():
                 if l[self.line][i] == ' ':
                     self.numColumn = self.numColumn + 1
                     try:
-                        if int(self.buff) > 0:
+                        if int(self.buff) >= 0:
                             self.diskCost.append(int(self.buff))
                         else:
                             self.diskCost.append(int(self.buff))
@@ -105,7 +105,8 @@ class InputTXT():
             l =self.__RemoveCommentAndSpace(l)
  
             self.__Check_NPARTS(l)
-            
+        if self.numColumn > 10:
+            self.returnErr = 'Number of rod over 10'
         return int(self.numDisk),int(self.numColumn),self.diskCost,self.returnErr
         
     

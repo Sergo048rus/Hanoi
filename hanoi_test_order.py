@@ -64,4 +64,4 @@ if __name__ == "__main__":
         ok, err = run_order_tests(filelist)
         print(TEST_PREFIX + "TOTAL: {0} OK, {1} FAILED, {2} TESTED".format(ok,err,len(filelist)))
     
-    print("*** HANOI TEST FINISHED ***")
+    print("*** HANOI TEST FINISHED ***") 
