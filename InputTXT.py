@@ -12,7 +12,7 @@ class InputTXT():
         self.numDisk = 0
         self.buff = ''
         self.diskCost = []
-        
+        self.sizeOrder = 0
         self.order = []
 
     def __Check_NPARTS(self,l):
@@ -106,7 +106,7 @@ class InputTXT():
  
             self.__Check_NPARTS(l)
             
-            return int(self.numDisk),int(self.numColumn),self.diskCost,self.returnErr
+        return int(self.numDisk),int(self.numColumn),self.diskCost,self.returnErr
         
     
 
@@ -181,7 +181,7 @@ if __name__ == "__main__":
 
     test = InputTXT()
 
-    FILENAME = "tests_file/oks_t2.txt" 
+    FILENAME = "tests_file/oks_t200.txt" 
     disk, column, diskCost, err = test.ReadDisk(FILENAME)
     print(' Disk = ',disk,'\n','Column = ', column,'\n','Err = ', err,'\n', 'Cost', diskCost)
 
