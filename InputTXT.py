@@ -116,45 +116,49 @@ class InputTXT():
                 self.line = self.line + 1
         self.line = self.line + 1
         startOrderLine = self.line
-
-        while l[self.line][0] != '/':
-           
-            buffOrder = {}
-            self.buff = ''  
-            count = 1                               
-            for i in range(len(l[self.line])):                   # Определение цены штырей и их количества
-                if l[self.line][i] == ' ' and count == 1:
-                    try:
-                        buffOrder['dI'] = int(self.buff)
-                        if buffOrder['dI'] > self.numDisk - 1 or buffOrder['dI'] < 0:
-                            self.returnErr = 'Order: Disk greater than the maximum or less than zero'
-                    except ValueError:
-                        self.returnErr = 'Order: The disk is not a number'
-                    self.buff = ''
-                    count = count + 1
-                else: 
-                    if l[self.line][i] == ' ' and count == 2:
+        try:
+            while l[self.line][0] != '/':
+            
+                buffOrder = {}
+                self.buff = ''  
+                count = 1                               
+                for i in range(len(l[self.line])):                   # Определение цены штырей и их количества
+                    if l[self.line][i] == ' ' and count == 1:
                         try:
-                            buffOrder['rSrc'] = int(self.buff)
-                            if buffOrder['rSrc'] > self.numColumn - 1 or buffOrder['rSrc'] < 0:
-                                self.returnErr = 'Order: Rod greater than the maximum or less than zero'
+                            buffOrder['dI'] = int(self.buff)
+                            if buffOrder['dI'] > self.numDisk - 1 or buffOrder['dI'] < 0:
+                                self.returnErr = 'Order: Disk greater than the maximum or less than zero'
                         except ValueError:
-                            self.returnErr = 'Order: The rod is not a number'
+                            self.returnErr = 'Order: The disk is not a number'
                         self.buff = ''
-                        count = 1
-                    else:
-                        self.buff = self.buff + l[self.line][i]
+                        count = count + 1
+                    else: 
+                        if l[self.line][i] == ' ' and count == 2:
+                            try:
+                                buffOrder['rSrc'] = int(self.buff)
+                                if buffOrder['rSrc'] > self.numColumn - 1 or buffOrder['rSrc'] < 0:
+                                    self.returnErr = 'Order: Rod greater than the maximum or less than zero'
+                            except ValueError:
+                                self.returnErr = 'Order: The rod is not a number'
+                            self.buff = ''
+                            count = 1
+                        else:
+                            self.buff = self.buff + l[self.line][i]
 
-            try:
-                buffOrder['rDst'] = int(self.buff)
-                if buffOrder['rDst'] > self.numColumn - 1 or buffOrder['rDst'] < 0:
-                    self.returnErr = 'Order: Rod greater than the maximum or less than zero'
-                self.order.append(buffOrder)
-            except ValueError:
-                self.returnErr = 'Order: The rod is not a number'  
+                try:
+                    buffOrder['rDst'] = int(self.buff)
+                    if buffOrder['rDst'] > self.numColumn - 1 or buffOrder['rDst'] < 0:
+                        self.returnErr = 'Order: Rod greater than the maximum or less than zero'
+                    self.order.append(buffOrder)
+                except ValueError:
+                    self.returnErr = 'Order: The rod is not a number'  
 
-            self.line = self.line + 1                           # Переходим на следующую линию
-        self.sizeOrder = self.line - startOrderLine
+                self.line = self.line + 1                           # Переходим на следующую линию
+            self.sizeOrder = self.line - startOrderLine
+        except IndexError:
+            self.returnErr = 'Order: expected symbol "/"'
+
+
     
 
 
@@ -182,7 +186,7 @@ if __name__ == "__main__":
 
     test = InputTXT()
 
-    FILENAME = "tests_file/oks_t200.txt" 
+    FILENAME = "tests_file/ord_t8.txt" 
     disk, column, diskCost, err = test.ReadDisk(FILENAME)
     print(' Disk = ',disk,'\n','Column = ', column,'\n','Err = ', err,'\n', 'Cost', diskCost)
 
