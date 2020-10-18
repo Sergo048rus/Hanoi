@@ -9,14 +9,38 @@
 [HTEST]: Run test #2 tests_file/ord_t3.txt
 [HTEST]: FAIL | ReadDisk -> Number of rod over 10
 
-[HTEST]: Run test #3 tests_file/ord_t1.txt
+[HTEST]: Run test #3 tests_file/t18.txt
+[HTEST]: FAIL | ReadDisk -> Err file!!!!!!!
+
+[HTEST]: Run test #4 tests_file/t12.txt
+[HTEST]: FAIL | ReadOrder -> Order: Disk greater than the maximum or less than zero
+
+[HTEST]: Run test #5 tests_file/ord_t1.txt
 [HTEST]: OK | Cost: 16969696969696978187
 
-[HTEST]: Run test #4 tests_file/ord_t5.txt
+[HTEST]: Run test #6 tests_file/t14.txt
+[HTEST]: FAIL | ReadOrder -> Order: Disk greater than the maximum or less than zero
+
+[HTEST]: Run test #7 tests_file/ord_t5.txt
 [HTEST]: OK | Cost: 0
 
-[HTEST]: Run test #5 tests_file/ord_t4.txt
+[HTEST]: Run test #8 tests_file/t16.txt
+[HTEST]: FAIL | ReadDisk -> Err file!!!!!!!
+
+[HTEST]: Run test #9 tests_file/t11.txt
+[HTEST]: FAIL | ReadDisk -> Init: The rod is not a number
+
+[HTEST]: Run test #10 tests_file/t13.txt
+[HTEST]: FAIL | ReadOrder -> Order: The rod is not a number
+
+[HTEST]: Run test #11 tests_file/t15.txt
+[HTEST]: FAIL | ReadDisk -> Err file!!!!!!!
+
+[HTEST]: Run test #12 tests_file/ord_t4.txt
 [HTEST]: OK | Cost: 190
-[HTEST]: TOTAL: 5 OK, 1 FAILED, 6 TESTED
+
+[HTEST]: Run test #13 tests_file/t17.txt
+[HTEST]: FAIL | ReadDisk -> Err file!!!!!!!
+[HTEST]: TOTAL: 5 OK, 9 FAILED, 14 TESTED
 *** HANOI TEST FINISHED ***
-TEST DATE: 2020-10-17T22:04:15
+TEST DATE: 2020-10-18T10:36:52
