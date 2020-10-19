@@ -6,6 +6,7 @@ from PyQt5.QtCore import (QCoreApplication, QObject, QRunnable, QThread,
                           QThreadPool, pyqtSignal, pyqtSlot, QTimer)
 
 from hanoi_console import ConsoleThread
+from hanoi_gui     import QtGuiThread
 
 
 class HanoiApp(): 
@@ -26,12 +27,13 @@ class HanoiApp():
         self.app = QtWidgets.QApplication([])  # we could add args and so on
 
         self.threadConsole = ConsoleThread()    # inherits QThread http://qt-project.org/doc/latest/qthread.html
-        # self.threadGui     = QtGuiThread()      # inherits QtGui.QWidget # ! TODO: uncomment when connected
+        self.threadGui     = QtGuiThread()      # inherits QtGui.QWidget for example
 
         self.threadConsole.finished.connect(self.app.exit)
         self.threadConsole.start()
 
-        # self.threadGui.finished.connect(self.app.exit)  # ! TODO: uncomment when connected
+        # self.threadConsole.signalOrderResponse.connect()
+        # self.threadConsole.signalOptiResponse.connect()
                     
         sys.exit(self.app.exec_())
 
