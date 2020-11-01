@@ -28,7 +28,9 @@ class HanoiGraph():
         self.rodCount = len(rodCostList)
         self.rodCost = rodCostList
         self.rodRange = range(0,self.rodCount)
+
         self.orderCost = 0
+        self.orderPath = []
         
         root = str("0" * diskCount) # используем строку, потому что надо хешируемый контейнер                    
         self.graph.add_node(root, color=self.ROOT_NODE_COLOR, # "корень" = начальное состояние
@@ -37,9 +39,10 @@ class HanoiGraph():
 
         self.genIndex = 0
         self.genDict = {self.genIndex: [root]} # словарь со списком нод каждого "поколения" типа string
-        #while len(self.genDict[self.genIndex]) != 0: 
-        while self.genIndex < 5: 
-            self.DEBUG_PRINT("Try makeGen #{i}\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n".format(i=self.genIndex)) # !DEBUG BLYAT! 
+        while len(self.genDict[self.genIndex]) != 0: 
+        # while self.genIndex < 5: # !DEBUG BLYAT!  
+            self.DEBUG_PRINT("Try makeGen #{i}".format(i=self.genIndex)) 
+            print(("Try makeGen #{i}".format(i=self.genIndex))) # !DEBUG BLYAT!  
 
             ngen = self.makeGen(self.genIndex)
             self.genIndex += 1
@@ -63,7 +66,7 @@ class HanoiGraph():
                             repl = str(r) + node[1:]
                         else:
                             repl = node[:i] + str(r) + node[i+1:] 
-                        print(node + "->" + repl + " gen " + str(genIndex)) 
+                        # print(node + "->" + repl + " gen " + str(genIndex)) 
 
                         # если такая нода возможна, добавляем ее
                         res = True
@@ -160,12 +163,12 @@ class HanoiGraph():
         return colors
 
     def layoutNodes(self): # positions for all nodes 
-        # return nx.spring_layout(self.graph)
+        return nx.spring_layout(self.graph)
         # return nx.bipartite_layout(self.graph, self.graph.nodes)
         # return nx.circular_layout(self.graph)
         # return nx.kamada_kawai_layout(self.graph)
         # return nx.planar_layout(self.graph)
-        return nx.shell_layout(self.graph)
+        # return nx.shell_layout(self.graph)
         # return nx.spectral_layout(self.graph)
            
     def draw(self):
@@ -181,8 +184,16 @@ class HanoiGraph():
         # plt.axis("off")
         plt.show() 
 
+    def calcCostDeijkstra(self, src, dst):
+        srcNode = str(src) * self.diskCount
+        dstNode = str(dst) * self.diskCount
+        print(srcNode + "-D>" + dstNode)
+        self.orderCost, self.orderPath = nx.single_source_dijkstra(self.graph, srcNode, dstNode)
+
 if __name__ == "__main__": 
+    # FILENAME = "tests_file/big-bro-data.txt" 
     FILENAME = "good_test/t4.txt" 
+
 
     import InputTXT as par
     parser = par.InputTXT()
@@ -190,10 +201,12 @@ if __name__ == "__main__":
     diskCount, column, diskCost, err = parser.ReadDisk(FILENAME)
     print(' DiskCount = ',diskCount,'\n','Column = ', column,'\n','Err = ', err,'\n', 'Cost', diskCost)
 
-    order, sizeOrder, returnErr = parser.ReadOrder(FILENAME)
-    if returnErr == 'OK' and err == 'OK':
-        graph = HanoiGraph(diskCount, diskCost, debugLevel=0)
+    # order, sizeOrder, returnErr = parser.ReadOrder(FILENAME)
+    if err == 'OK':
+        graph = HanoiGraph(diskCount, diskCost, debugLevel=1)
         graph.exportGen("hg_out.txt")
 
+        graph.calcCostDeijkstra(0,1) 
+        print("Shortest path: {0}".format(graph.orderPath))
         print("Total cost: {0}".format(graph.orderCost))
-        graph.draw()
+
