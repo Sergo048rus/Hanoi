@@ -102,7 +102,7 @@ class HanoiGraphOrder():
                 result = True
         return result
             
-    # если на стержне для переноса есть с диск с меньшим индексом -> текущий диск перенести нельзя #FIXME: перенос большего на меньший
+    # если на стержне для переноса есть с диск с меньшим индексом -> текущий диск перенести нельзя 
     def isDiskMoveLocked(self, dstNodeName, diskIndex):
         result = False
         for i in range(0, diskIndex):
@@ -134,9 +134,9 @@ class HanoiGraphOrder():
         plt.show() 
 
 
-# TODO: пофиксить ошибку OGRAPH в основном графе
+
 if __name__ == "__main__": 
-    FILENAME = "tests_file/t4.txt" 
+    FILENAME = "good_test/t4.txt" 
 
     parser = parser.InputTXT()
 

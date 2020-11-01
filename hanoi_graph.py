@@ -1,7 +1,7 @@
 import networkx as nx
 import matplotlib.pyplot as plt 
 
-# TODO: поправить проверки как у hanoi_graph_order
+
 class HanoiGraph():
     ''' класс графа с проверкой ограничений при добавлении вершин\n
         считается, что башня построена на 0-ом штыре\n      
@@ -16,16 +16,18 @@ class HanoiGraph():
     def DEBUG_PRINT(self, dstr):
         if self.DEBUG_LEVEL == 0: 
             print(self.PRINT_PREFIX + str(dstr)) # TODO: смотреть предков и если совпадает то не строить (обр путь)
-    
+ 
     # входные аргументы: кол-во дисков и список со стоимостью каждого штыря
-    def __init__(self, diskCount, rodCostList):
-        self.graph = nx.DiGraph() # представим положение дисков как вершину направленного графа
+    def __init__(self, diskCount, rodCostList, debugLevel=1):
+        self.DEBUG_LEVEL = debugLevel
+        self.graph = nx.DiGraph() 
 
         self.diskCount = diskCount
         self.diskRange = range(0,diskCount)
 
         self.rodCount = len(rodCostList)
         self.rodCost = rodCostList
+        self.orderCost = 0
         
         root = str("0" * diskCount) # используем строку, потому что надо хешируемый контейнер                    
         self.graph.add_node(root, color=self.ROOT_NODE_COLOR, # "корень" = начальное состояние
@@ -43,10 +45,10 @@ class HanoiGraph():
             self.genDict[self.genIndex] = ngen
         
         self.DEBUG_PRINT("No turns on gen #{i}".format(i=self.genIndex))
-        self.tryToAddNode(self.graph.nodes["000"],"100")
-        self.tryToAddNode(self.graph.nodes["100"], "000")
-        self.tryToAddNode(self.graph.nodes["000"], "120")
-        self.tryToAddNode(self.graph.nodes["000"], "020")
+        # self.tryToAddNode(self.graph.nodes["000"],"100")
+        # self.tryToAddNode(self.graph.nodes["100"], "000")
+        # self.tryToAddNode(self.graph.nodes["000"], "120")
+        # self.tryToAddNode(self.graph.nodes["000"], "020")
 
     def makeGen(self):
         return []
@@ -97,13 +99,6 @@ class HanoiGraph():
         return result
             
     # если на стержне для переноса есть с диск с меньшим индексом -> текущий диск перенести нельзя 
-    # def isDiskMoveLocked(self, currentNode, dstNodeName, diskIndex):
-    #     result = False
-    #     for i in range(0, diskIndex):
-    #         if dstNodeName[i] == currentNode["name"][diskIndex]:
-    #             result = True
-    #     return result
-      # если на стержне для переноса есть с диск с меньшим индексом -> текущий диск перенести нельзя #FIXME: перенос большего на меньший
     def isDiskMoveLocked(self, dstNodeName, diskIndex):
         result = False
         for i in range(0, diskIndex):
@@ -111,19 +106,46 @@ class HanoiGraph():
                 result = True
         return result
 
-    # возращает список цветов нод
+    # возращает список цветов нод #! DEPRECATED
     def getNodeColors(self):
         colors = [] 
         for n,d in self.graph.nodes(data=True):
             colors.append(d["color"])
         return colors
 
+    def layoutNodes(self): # positions for all nodes 
+        # return nx.spring_layout(self.graph)
+        # return nx.bipartite_layout(self.graph, self.graph.nodes)
+        # return nx.circular_layout(self.graph)
+        # return nx.kamada_kawai_layout(self.graph)
+        # return nx.planar_layout(self.graph)
+        return nx.shell_layout(self.graph)
+        # return nx.spectral_layout(self.graph)
+           
     def draw(self):
-        plt.figure(figsize=(8,8))
-        nx.draw(self.graph, with_labels=True, node_color=self.getNodeColors()) 
-        # TODO: отрисовка весов и pos'ов
-        # pos = nx.get_node_attributes(self.graph,'pos')
-        # labels = nx.get_edge_attributes(self.graph,'weight')
-        # nx.draw_networkx_edge_labels(self.graph, pos, edge_labels=labels)
+        plt.figure(figsize=(7,7))
+        pos = self.layoutNodes()
+        nx.draw_networkx_nodes(self.graph, pos)                 # nodes [node_size=700]
+        nx.draw_networkx_labels(self.graph, pos)
 
+        labels = nx.get_edge_attributes(self.graph, 'weight')   # edge labels
+        nx.draw_networkx_edges(self.graph, pos)
+        nx.draw_networkx_edge_labels(self.graph, pos=pos, edge_labels=labels)
+        
+        # plt.axis("off")
         plt.show() 
+
+if __name__ == "__main__": 
+    FILENAME = "good_test/t4.txt" 
+
+    import InputTXT as par
+    parser = par.InputTXT()
+
+    diskCount, column, diskCost, err = parser.ReadDisk(FILENAME)
+    print(' DiskCount = ',diskCount,'\n','Column = ', column,'\n','Err = ', err,'\n', 'Cost', diskCost)
+
+    order, sizeOrder, returnErr = parser.ReadOrder(FILENAME)
+    if returnErr == 'OK' and err == 'OK':
+        graph = HanoiGraph(diskCount, diskCost, debugLevel=1)
+        print("Total cost: {0}".format(graph.orderCost))
+        graph.draw()
