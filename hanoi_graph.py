@@ -27,6 +27,7 @@ class HanoiGraph():
 
         self.rodCount = len(rodCostList)
         self.rodCost = rodCostList
+        self.rodRange = range(0,self.rodCount)
         self.orderCost = 0
         
         root = str("0" * diskCount) # используем строку, потому что надо хешируемый контейнер                    
@@ -35,9 +36,10 @@ class HanoiGraph():
                                   name=root) 
 
         self.genIndex = 0
-        self.genDict = {self.genIndex: [root]} # словарь со списком нод каждого "поколения"
-        while len(self.genDict[self.genIndex]) != 0: 
-            self.DEBUG_PRINT("Try makeGen #{i}".format(i=self.genIndex))
+        self.genDict = {self.genIndex: [root]} # словарь со списком нод каждого "поколения" типа string
+        #while len(self.genDict[self.genIndex]) != 0: 
+        while self.genIndex < 5: 
+            self.DEBUG_PRINT("Try makeGen #{i}\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n".format(i=self.genIndex)) # !DEBUG BLYAT! 
 
             ngen = self.makeGen(self.genIndex)
             self.genIndex += 1
@@ -46,13 +48,56 @@ class HanoiGraph():
         self.DEBUG_PRINT("No turns on gen #{i}".format(i=self.genIndex))
         self.printGen()
 
-    # пройтись по текущему поколению и построить всевозможные ноды (тупо перебор)
+    # пройтись по текущему поколению и построить всевозможные ноды (тупо полный перебор)
     def makeGen(self, genIndex):
-        return []
+        newGen = [] # TODO: list is slow containter
+        # для каждой ноды в текущем поколении
+        for node in self.genDict[genIndex]:
+            # для каждого диска в ноде берем все возможные/невозможные варианты
+            for i in range(0,len(node)):
+                for r in self.rodRange:
+                    if r != int(node[i]):        # если возможна замена, меняем i-й элемент 
+                        if i == (len(node) - 1): # !check boundary cases!
+                            repl = node[:i] + str(r)
+                        elif i == 0:
+                            repl = str(r) + node[1:]
+                        else:
+                            repl = node[:i] + str(r) + node[i+1:] 
+                        print(node + "->" + repl + " gen " + str(genIndex)) 
 
+                        # если такая нода возможна, добавляем ее
+                        res = True
+                        for newNode in newGen:
+                            if newNode == repl:
+                                res = False
+                        if res:        
+                            res = self.checkGenDict(genIndex, repl) # проверяем, что новая нода не из предыдущих поколений
+                        if res:
+                            res = self.tryToAddNode(self.graph.nodes[node], repl) # пробуем добавить
+                        if res: 
+                            newGen.append(repl) 
+        return newGen
+
+    # возвращает True, если нет такой же ноды в предыдущих поколении
+    def checkGenDict(self, genIndex, newNode):
+        for i in range(0,genIndex+1):
+            for node in self.genDict[i]:
+                if node == newNode:
+                    self.DEBUG_PRINT("Gen duplicate {0}->{1}".format(node,newNode))
+                    return False
+        return True
+
+    # вывод словаря поколений по поколениям в консоль
     def printGen(self):
         for k in self.genDict.keys():
             self.DEBUG_PRINT("gen #{0}: {1}".format(k,self.genDict[k]))
+
+    # вывод словаря поколений по поколениям в файл
+    def exportGen(self, filename):
+        with open(str(filename), "w", encoding="utf-8") as fos:
+            fos.write("=== Hanoi exportGen ===\r\n")
+            for k in self.genDict.keys():
+                fos.write("gen #{0}: {1}\r\n".format(k,self.genDict[k]))
 
     # добавляет ноду со связью, если это возможно
     def tryToAddNode(self, rootNode, dstNodeName):
@@ -65,21 +110,21 @@ class HanoiGraph():
 
         if countOfChanges > 1:
             self.DEBUG_PRINT("Multiple move [{dst}] <- [{root}]".format(i=changedIndex, dst=dstNodeName, root=rootNode["name"]))
-            return
+            return False
 
         if self.isDiskLocked(rootNode, changedIndex):
             self.DEBUG_PRINT("Disk #{i} locked [{dst}] <- [{root}]".format(i=changedIndex, dst=dstNodeName, root=rootNode["name"]))
-            return
+            return False
 
-        if self.isDiskMoveLocked(rootNode, dstNodeName, changedIndex):
+        if self.isDiskMoveLocked(dstNodeName, changedIndex):
             self.DEBUG_PRINT("Disk move locked [{dst}] <- [{root}]".format(i=changedIndex, dst=dstNodeName, root=rootNode["name"]))
-            return
+            return False
 
         for n in self.genDict[self.genIndex]:
             if self.graph.nodes[n]["name"] == dstNodeName:
                 self.DEBUG_PRINT("Node [{0}] exists, add edge".format(dstNodeName))
                 self.graph.add_edge(rootNode, n, weight=self.rodCost[int(dstNodeName[changedIndex])])
-                return
+                return False
 
         self.graph.add_node(dstNodeName, color=self.ORDINARY_NODE_COLOR, # create node
                                          weight=self.rodCost[int(dstNodeName[changedIndex])],
@@ -89,7 +134,7 @@ class HanoiGraph():
         
         self.DEBUG_PRINT("Add node [{dst}] <-{cost}-- [{root}]".format(cost=self.rodCost[int(dstNodeName[changedIndex])],
                                                                 dst=dstNodeName, root=rootNode["name"]))
-        
+        return True
 
     # если есть диск с меньшим индексом на том же кольце -> текущий диск заблокирован
     def isDiskLocked(self, currentNode, diskIndex):
@@ -148,5 +193,7 @@ if __name__ == "__main__":
     order, sizeOrder, returnErr = parser.ReadOrder(FILENAME)
     if returnErr == 'OK' and err == 'OK':
         graph = HanoiGraph(diskCount, diskCost, debugLevel=0)
+        graph.exportGen("hg_out.txt")
+
         print("Total cost: {0}".format(graph.orderCost))
         graph.draw()
