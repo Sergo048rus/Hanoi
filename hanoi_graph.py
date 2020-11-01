@@ -36,22 +36,23 @@ class HanoiGraph():
 
         self.genIndex = 0
         self.genDict = {self.genIndex: [root]} # словарь со списком нод каждого "поколения"
-
         while len(self.genDict[self.genIndex]) != 0: 
             self.DEBUG_PRINT("Try makeGen #{i}".format(i=self.genIndex))
 
-            ngen = self.makeGen()
+            ngen = self.makeGen(self.genIndex)
             self.genIndex += 1
             self.genDict[self.genIndex] = ngen
         
         self.DEBUG_PRINT("No turns on gen #{i}".format(i=self.genIndex))
-        # self.tryToAddNode(self.graph.nodes["000"],"100")
-        # self.tryToAddNode(self.graph.nodes["100"], "000")
-        # self.tryToAddNode(self.graph.nodes["000"], "120")
-        # self.tryToAddNode(self.graph.nodes["000"], "020")
+        self.printGen()
 
-    def makeGen(self):
+    # пройтись по текущему поколению и построить всевозможные ноды (тупо перебор)
+    def makeGen(self, genIndex):
         return []
+
+    def printGen(self):
+        for k in self.genDict.keys():
+            self.DEBUG_PRINT("gen #{0}: {1}".format(k,self.genDict[k]))
 
     # добавляет ноду со связью, если это возможно
     def tryToAddNode(self, rootNode, dstNodeName):
@@ -146,6 +147,6 @@ if __name__ == "__main__":
 
     order, sizeOrder, returnErr = parser.ReadOrder(FILENAME)
     if returnErr == 'OK' and err == 'OK':
-        graph = HanoiGraph(diskCount, diskCost, debugLevel=1)
+        graph = HanoiGraph(diskCount, diskCost, debugLevel=0)
         print("Total cost: {0}".format(graph.orderCost))
         graph.draw()
