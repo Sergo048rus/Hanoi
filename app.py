@@ -32,9 +32,11 @@ class HanoiApp():
         self.threadConsole.finished.connect(self.app.exit)
         self.threadConsole.start()
 
-        # self.threadConsole.signalOrderResponse.connect()
-        # self.threadConsole.signalOptiResponse.connect()
+        self.threadConsole.signalOrderResponse.connect(lambda orderDict: self.threadGui.gui.slotGUIOrder(orderDict))
+        self.threadConsole.signalOptiResponse.connect(lambda orderDict: self.threadGui.gui.slotGUIOrder(orderDict))
                     
+        self.threadGui.gui.signalStartOrder.connect(lambda filename: self.threadConsole.slotStartOrder(filename))
+        self.threadGui.gui.signalStartOpti.connect(lambda filename: self.threadConsole.slotStartOpti(filename))
         sys.exit(self.app.exec_())
 
 

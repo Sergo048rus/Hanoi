@@ -1,10 +1,13 @@
-from test import Window as GuiWindow
-from Hanoi import Hanoi as HanoiWidget 
- 
+from GUI_module import Window as GuiWindow
+
+from PyQt5.QtWidgets import QApplication
+import sys
+
 
 class QtGuiThread():
 
     def __init__(self):
-        self.widget = HanoiWidget()
-        self.gui = GuiWindow(self.widget)
+
+        self.gui = GuiWindow()
+  
 

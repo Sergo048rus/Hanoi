@@ -3,16 +3,28 @@ from PyQt5 import QtGui
 from PyQt5.QtWidgets import QApplication, QMainWindow, QGraphicsScene, QGraphicsView, QSizePolicy, QPushButton, QLineEdit,QFileDialog,QTextEdit
 
 import sys
-from Hanoi import *
+from Hanoi import Hanoi as HanoiWidget
 
 from PyQt5.QtGui import QBrush, QPen
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt, pyqtSignal, pyqtSlot
 import InputTXT as par
 
 
 
 class Window(QMainWindow):
-    def __init__(self,Hanoi):
+
+    signalStartOrder = pyqtSignal(str)
+    signalStartOpti  = pyqtSignal(str)
+    
+    @pyqtSlot()
+    def slotGUIOrder(self, orderDict):
+        print("slotStartOrder")
+        
+
+
+
+
+    def __init__(self):
         super().__init__()
 
         self.title = "Hanoi 2020 @Zavodnoi Apelsin"
@@ -21,9 +33,10 @@ class Window(QMainWindow):
         self.width = 1800
         self.heigth = 800
         
-        self.Hanoi = Hanoi
+        self.Hanoi = HanoiWidget()
         self.parser = par.InputTXT()
         self.InitWindow()
+        self.filename = 'None'
 
         
     
@@ -95,15 +108,20 @@ class Window(QMainWindow):
         #disc_list[7] = Hanoi.disk_place(2,0,7,scene)
     
     def startOrderClicked(self):
-        numDisk, numColumn, Cost, err = self.parser.ReadDisk(self.filename)
-    
-        if err == 'OK':
-            disc_list = Hanoi.StartInit(numDisk,numColumn,self.scene)
+        if self.filename != 'None':
+            self.signalStartOrder.emit(self.filename)
 
-        order, sizeOrder, returnErr = self.parser.ReadOrder(self.filename)
+
+        # numDisk, numColumn, Cost, err = self.parser.ReadDisk(self.filename)
+    
+        # if err == 'OK':
+        #     disc_list = self.Hanoi.StartInit(numDisk,numColumn,self.scene)
+
+        # order, sizeOrder, returnErr = self.parser.ReadOrder(self.filename)
 
     def startOptimClicked(self):
-        pass
+        if self.filename != 'None':
+            self.signalStartOpti.emit(self.filename)
 
     def stepOrderForward(self):
         pass
@@ -120,9 +138,9 @@ class Window(QMainWindow):
 
 
 if __name__ == "__main__": 
-    Hanoi = Hanoi()
+
     App = QApplication(sys.argv)
-    window = Window(Hanoi)
+    window = Window()
 
    
     
