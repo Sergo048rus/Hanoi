@@ -7,7 +7,7 @@ from Hanoi import Hanoi as HanoiWidget
 
 from PyQt5.QtGui import QBrush, QPen
 from PyQt5.QtCore import Qt, pyqtSignal, pyqtSlot
-import InputTXT as par
+
 
 
 
@@ -112,12 +112,7 @@ class Window(QMainWindow):
             self.signalStartOrder.emit(self.filename)
 
 
-        # numDisk, numColumn, Cost, err = self.parser.ReadDisk(self.filename)
-    
-        # if err == 'OK':
-        #     disc_list = self.Hanoi.StartInit(numDisk,numColumn,self.scene)
 
-        # order, sizeOrder, returnErr = self.parser.ReadOrder(self.filename)
 
     def startOptimClicked(self):
         if self.filename != 'None':

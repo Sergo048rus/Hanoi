@@ -2,7 +2,7 @@
 from PyQt5        import (QtGui, QtWidgets)
 from PyQt5.QtCore import (QCoreApplication, QObject, QRunnable, QThread,
                           QThreadPool, pyqtSignal, pyqtSlot)
-
+import InputTXT as par
 import time # ! to be deleted
 
 # Subclassing QThread http://qt-project.org/doc/latest/qthread.html
@@ -35,8 +35,12 @@ class ConsoleThread(QThread):
     @pyqtSlot()
     def slotStartOrder(self, filename):
         print("slotStartOrder")
+        # numDisk, numColumn, Cost, err = self.parser.ReadDisk(self.filename)
+    
+
+
         
     @pyqtSlot()
     def slotStartOpti(self, filename):
         print("slotStartOpti")
-        
+        # numDisk, numColumn, Cost, err = self.parser.ReadDisk(self.filename)

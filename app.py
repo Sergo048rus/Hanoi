@@ -14,8 +14,8 @@ class HanoiApp():
         GUI <---> CONSOLE \n
         signalStartOrder [str][filename]  ---> \n
         signalStartOpti  [str][filename]  ---> \n
-        <--- signalOrderResponse [dict][status(read+order+graph) + rodCostList + diskCount + solutionGraph] \n
-        <--- signalOptiResponse  [dict][status(read+order+graph) + TODO ] \n
+        <--- signalOrderResponse [dict][status(read+order+graph)(bool) + rodCostList + diskCount + orderList] \n
+        
 
         1. Создаются объекты классов консоли и интерфейса
         2. В классах объявляются соответствующие слоты и сигналы (см. hanoi_console)

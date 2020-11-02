@@ -135,7 +135,8 @@ class InputTXT():
                 buffOrder = {}
                 self.buff = ''  
                 count = 1                               
-                for i in range(len(l[self.line])):                   # Определение цены штырей и их количества
+                # for i in range(len(l[self.line])): 
+                for i in range(5):                  # максимальное число стобов в ордере 3 + 2 пробела
                     if l[self.line][i] == ' ' and count == 1:
                         try:
                             buffOrder['dI'] = int(self.buff)
@@ -199,7 +200,7 @@ if __name__ == "__main__":
 
     test = InputTXT()
 
-    FILENAME = "tests_file/q.txt" 
+    FILENAME = "tests_file/t13.txt" 
     disk, column, diskCost, err = test.ReadDisk(FILENAME)
     print(' Disk = ',disk,'\n','Column = ', column,'\n','Err = ', err,'\n', 'Cost', diskCost)
 
