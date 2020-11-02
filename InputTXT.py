@@ -76,6 +76,10 @@ class InputTXT():
     def __RemoveCommentAndSpace(self, l):
             while l.count('') != 0:
                 l.remove('')
+            for line in l:
+                if len(line) > 3:
+                    if line[1] == '-' and line[2] == '-':
+                        l.remove(line)
 
             for line in l:
                 if len(line) > 2:
@@ -89,13 +93,18 @@ class InputTXT():
 
                 for j in range(len(l)):
                     l[j] = l[j].split('--')[0]
+
+                for line in l:
+                    if len(line) == 0:
+                        l.remove(line)
             except Exception:
                  self.returnErr = 'Err file!!!!!!!'
             return l
+
     def ReadDisk(self,fileName) -> int:
         self.returnErr = 'OK'
         try:
-            self.f = open(fileName)
+            self.f = open(fileName,encoding='UTF-8')
         except Exception:
             self.returnErr = 'File is not exist'
         if self.returnErr == 'OK':
@@ -112,8 +121,12 @@ class InputTXT():
     
 
     def __checkOrder(self,l):
-        while l[self.line] != 'ORDER':             
-                self.line = self.line + 1
+        self.line = 0
+        try:
+            while l[self.line] != 'ORDER':             
+                    self.line = self.line + 1
+        except IndexError:
+            self.returnErr = 'Order: expected symbol "ORDER"'
         self.line = self.line + 1
         startOrderLine = self.line
         try:
@@ -165,7 +178,7 @@ class InputTXT():
     def ReadOrder(self,fileName):
         self.returnErr = 'OK'
         try:
-            self.f = open(fileName)
+            self.f = open(fileName,encoding='UTF-8')
         except Exception:
             self.returnErr = 'File is not exist'
         if self.returnErr == 'OK':
@@ -186,7 +199,7 @@ if __name__ == "__main__":
 
     test = InputTXT()
 
-    FILENAME = "tests_file/ord_t8.txt" 
+    FILENAME = "tests_file/q.txt" 
     disk, column, diskCost, err = test.ReadDisk(FILENAME)
     print(' Disk = ',disk,'\n','Column = ', column,'\n','Err = ', err,'\n', 'Cost', diskCost)
 
