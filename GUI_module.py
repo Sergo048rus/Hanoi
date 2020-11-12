@@ -1,15 +1,18 @@
+import sys
+
 from PyQt5 import QtGui
 # from PyQt5.QtGui import QFont
-from PyQt5.QtWidgets import QApplication, QMainWindow, QGraphicsScene, QGraphicsView, QSizePolicy, QPushButton, QLineEdit,QFileDialog,QTextEdit
-
-import sys
-from Hanoi import Hanoi as HanoiWidget
-
 from PyQt5.QtGui import QBrush, QPen
 from PyQt5.QtCore import Qt, pyqtSignal, pyqtSlot
+from PyQt5.QtWidgets import (QApplication, QMainWindow, QGraphicsScene, QGraphicsView, QSizePolicy, QPushButton,
+                             QLineEdit, QFileDialog, QTextEdit)
 
+from Hanoi import Hanoi as HanoiWidget
+from InputTXT import InputTXT
 
-
+'''
+NB: импорт системных библиотек прописывается в первую очередь, потом local-lib, потом user-lib
+'''
 
 class Window(QMainWindow):
 
@@ -21,9 +24,6 @@ class Window(QMainWindow):
         print("slotStartOrder")
         
 
-
-
-
     def __init__(self):
         super().__init__()
 
@@ -34,7 +34,7 @@ class Window(QMainWindow):
         self.heigth = 800
         
         self.Hanoi = HanoiWidget()
-        self.parser = par.InputTXT()
+        self.parser = InputTXT()
         self.InitWindow()
         self.filename = 'None'
 
