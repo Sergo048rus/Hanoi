@@ -39,12 +39,14 @@ class HanoiGraph():
 
         self.genIndex = 0
         self.genDict = {self.genIndex: [root]} # словарь со списком нод каждого "поколения" типа string
+        self.placedDiskCount = 0               # количество вставших на место дисков
+
         while len(self.genDict[self.genIndex]) != 0: 
         # while self.genIndex < 5: # !DEBUG BLYAT!  
             self.DEBUG_PRINT("Try makeGen #{i}".format(i=self.genIndex)) 
             print(("Try makeGen #{i}".format(i=self.genIndex))) # !DEBUG BLYAT!  
 
-            ngen = self.makeGen(self.genIndex)
+            ngen = self.makeGen(self.genIndex, '1')
             self.genIndex += 1
             self.genDict[self.genIndex] = ngen
         
@@ -52,12 +54,14 @@ class HanoiGraph():
         self.printGen()
 
     # пройтись по текущему поколению и построить всевозможные ноды (тупо полный перебор)
-    def makeGen(self, genIndex):
+    def makeGen(self, genIndex, targetRode):
         newGen = [] # TODO: list is slow containter
+        
+        diskPlaced = False
         # для каждой ноды в текущем поколении
         for node in self.genDict[genIndex]:
             # для каждого диска в ноде берем все возможные/невозможные варианты
-            for i in range(0,len(node)):
+            for i in range(0,len(node) - self.placedDiskCount): # без уже поставленных на место дисков
                 for r in self.rodRange:
                     if r != int(node[i]):        # если возможна замена, меняем i-й элемент 
                         if i == (len(node) - 1): # !check boundary cases!
@@ -79,6 +83,16 @@ class HanoiGraph():
                             res = self.tryToAddNode(self.graph.nodes[node], repl) # пробуем добавить
                         if res: 
                             newGen.append(repl) 
+                            if repl[-1 - self.placedDiskCount] == targetRode and repl[-1 - self.placedDiskCount + 1] == targetRode:
+                                print(repl + ' = ' + targetRode)
+                                diskPlaced = True
+                                
+        if diskPlaced:  
+            print('Disk SET #{0}'.format(self.placedDiskCount + 1))
+            self.placedDiskCount += 1
+            # раз диск поставлен надо удалить остальные "неправильные" ноды
+            newGen = [x for x in newGen if str(targetRode * self.placedDiskCount) in x[-1 - self.placedDiskCount + 1:]] 
+            
         return newGen
 
     # возвращает True, если нет такой же ноды в предыдущих поколении
@@ -163,12 +177,12 @@ class HanoiGraph():
         return colors
 
     def layoutNodes(self): # positions for all nodes 
-        return nx.spring_layout(self.graph)
+        # return nx.spring_layout(self.graph)
         # return nx.bipartite_layout(self.graph, self.graph.nodes)
         # return nx.circular_layout(self.graph)
         # return nx.kamada_kawai_layout(self.graph)
         # return nx.planar_layout(self.graph)
-        # return nx.shell_layout(self.graph)
+        return nx.shell_layout(self.graph)
         # return nx.spectral_layout(self.graph)
            
     def draw(self):
@@ -205,6 +219,7 @@ if __name__ == "__main__":
     if err == 'OK':
         graph = HanoiGraph(diskCount, diskCost, debugLevel=1)
         graph.exportGen("hg_out.txt")
+        # graph.draw()
 
         graph.calcCostDeijkstra(0,1) 
         print("Shortest path: {0}".format(graph.orderPath))
