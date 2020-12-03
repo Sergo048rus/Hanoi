@@ -1,6 +1,8 @@
 import networkx as nx
 import matplotlib.pyplot as plt 
 
+from stopwatch import StopWatch
+
 
 class HanoiGraph():
     ''' класс графа с проверкой ограничений при добавлении вершин\n
@@ -44,11 +46,12 @@ class HanoiGraph():
         while len(self.genDict[self.genIndex]) != 0: 
         # while self.genIndex < 5: # !DEBUG BLYAT!  
             self.DEBUG_PRINT("Try makeGen #{i}".format(i=self.genIndex)) 
-            print(("Try makeGen #{i}".format(i=self.genIndex))) # !DEBUG BLYAT!  
+            print(("Try makeGen #{i}".format(i=self.genIndex))) 
 
             ngen = self.makeGen(self.genIndex, '1')
             self.genIndex += 1
             self.genDict[self.genIndex] = ngen
+            print(len(ngen))
         
         self.DEBUG_PRINT("No turns on gen #{i}".format(i=self.genIndex))
         self.printGen()
@@ -84,15 +87,15 @@ class HanoiGraph():
                         if res: 
                             newGen.append(repl) 
                             if repl[-1 - self.placedDiskCount] == targetRode and repl[-1 - self.placedDiskCount + 1] == targetRode:
-                                print(repl + ' = ' + targetRode)
+                                # print(repl + ' = ' + targetRode)
                                 diskPlaced = True
                                 
         if diskPlaced:  
-            print('Disk SET #{0}'.format(self.placedDiskCount + 1))
+            # print('Disk SET #{0}'.format(self.placedDiskCount + 1))
             self.placedDiskCount += 1
             # раз диск поставлен надо удалить остальные "неправильные" ноды
             newGen = [x for x in newGen if str(targetRode * self.placedDiskCount) in x[-1 - self.placedDiskCount + 1:]] 
-            
+
         return newGen
 
     # возвращает True, если нет такой же ноды в предыдущих поколении
@@ -205,19 +208,23 @@ class HanoiGraph():
         self.orderCost, self.orderPath = nx.single_source_dijkstra(self.graph, srcNode, dstNode)
 
 if __name__ == "__main__": 
-    # FILENAME = "tests_file/big-bro-data.txt" 
-    FILENAME = "good_test/t4.txt" 
+    FILENAME = "solver_test/20d3r.txt" 
+    # FILENAME = "good_test/t4.txt" 
 
 
     import InputTXT as par
     parser = par.InputTXT()
 
     diskCount, column, diskCost, err = parser.ReadDisk(FILENAME)
+    print('TESTFILE: %s' % (FILENAME))
     print(' DiskCount = ',diskCount,'\n','Column = ', column,'\n','Err = ', err,'\n', 'Cost', diskCost)
 
     # order, sizeOrder, returnErr = parser.ReadOrder(FILENAME)
     if err == 'OK':
+        sw = StopWatch()
         graph = HanoiGraph(diskCount, diskCost, debugLevel=1)
+        sw.stop()
+
         graph.exportGen("hg_out.txt")
         # graph.draw()
 
