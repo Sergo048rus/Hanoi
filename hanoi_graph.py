@@ -1,3 +1,4 @@
+import os
 import networkx as nx
 import matplotlib.pyplot as plt 
 
@@ -210,15 +211,15 @@ class HanoiGraph():
         self.orderCost, self.orderPath = nx.single_source_dijkstra(self.graph, srcNode, dstNode)
 
 if __name__ == "__main__": 
-    FILENAME = "solver_test/10d5r.txt" 
-    # FILENAME = "good_test/t4.txt" 
-
+    FOLDERNAME = "solver_test/"
+    FILENAME = "6d4r.txt" 
+    FILEPATH = FOLDERNAME + FILENAME
 
     import InputTXT as par
     parser = par.InputTXT()
 
-    diskCount, column, diskCost, err = parser.ReadDisk(FILENAME)
-    print('TESTFILE: %s' % (FILENAME))
+    diskCount, column, diskCost, err = parser.ReadDisk(FILEPATH)
+    print('TESTFILE: %s' % (FILEPATH))
     print(' DiskCount = ',diskCount,'\n','Column = ', column,'\n','Err = ', err,'\n', 'Cost', diskCost)
 
     # order, sizeOrder, returnErr = parser.ReadOrder(FILENAME)
@@ -226,8 +227,9 @@ if __name__ == "__main__":
         sw = StopWatch()
         graph = HanoiGraph(diskCount, diskCost, debugLevel=0)
         sw.stop()
-
-        graph.exportGen("hg_out.txt")
+        
+        exportPath = os.path.abspath(os.path.dirname(os.path.abspath(__file__)) + ("/solver_out/{0}_out.txt".format(FILENAME.split('.')[0])))
+        graph.exportGen(exportPath)
         # graph.draw()
 
         graph.calcCostDeijkstra(0,1) 
