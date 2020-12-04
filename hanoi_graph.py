@@ -237,7 +237,7 @@ class HanoiGraph():
 
 if __name__ == "__main__": 
     FOLDERNAME = "solver_test/"
-    FILENAME = "6d4r.txt" 
+    FILENAME = "10d5r.txt" 
     FILEPATH = FOLDERNAME + FILENAME
 
     import InputTXT as par
