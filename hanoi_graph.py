@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 
 from stopwatch import StopWatch
 
+# ! ТЕКУЩАЯ ГЛАВНАЯ ПРОБЕЛМА - проверка всех предыдущих нод
 
 class HanoiGraph():
     ''' класс графа с проверкой ограничений при добавлении вершин\n
@@ -17,7 +18,7 @@ class HanoiGraph():
 
     def DEBUG_PRINT(self, dstr):
         if self.DEBUG_LEVEL == 0: 
-            print(self.PRINT_PREFIX + str(dstr)) # TODO: смотреть предков и если совпадает то не строить (обр путь)
+            print(self.PRINT_PREFIX + str(dstr)) 
  
     # входные аргументы: кол-во дисков и список со стоимостью каждого штыря
     def __init__(self, diskCount, rodCostList, debugLevel=1):
@@ -44,17 +45,16 @@ class HanoiGraph():
         self.placedDiskCount = 0               # количество вставших на место дисков
 
         while len(self.genDict[self.genIndex]) != 0: 
-        # while self.genIndex < 5: # !DEBUG BLYAT!  
-            self.DEBUG_PRINT("Try makeGen #{i}".format(i=self.genIndex)) 
-            print(("Try makeGen #{i}".format(i=self.genIndex))) 
+        # while self.genIndex < 5:  
+            print(("Try makeGen #{i}".format(i=self.genIndex))) #! slow print 
 
             ngen = self.makeGen(self.genIndex, '1')
             self.genIndex += 1
             self.genDict[self.genIndex] = ngen
-            print(len(ngen))
+            print(len(ngen)) #! slow print
         
         self.DEBUG_PRINT("No turns on gen #{i}".format(i=self.genIndex))
-        self.printGen()
+        # self.printGen() #! slow print
 
     # пройтись по текущему поколению и построить всевозможные ноды (тупо полный перебор)
     def makeGen(self, genIndex, targetRode):
@@ -77,7 +77,7 @@ class HanoiGraph():
 
                         # если такая нода возможна, добавляем ее
                         res = True
-                        for newNode in newGen:
+                        for newNode in newGen: # дупликат из новых
                             if newNode == repl:
                                 res = False
                         if res:        
@@ -100,10 +100,11 @@ class HanoiGraph():
 
     # возвращает True, если нет такой же ноды в предыдущих поколении
     def checkGenDict(self, genIndex, newNode):
-        for i in range(0,genIndex+1):
+        for i in range(0,genIndex+1):          # все 
+        # for i in range(genIndex,genIndex+1): # предыдущие и текущее
             for node in self.genDict[i]:
                 if node == newNode:
-                    self.DEBUG_PRINT("Gen duplicate {0}->{1}".format(node,newNode))
+                    # self.DEBUG_PRINT("Gen duplicate {0}->{1}".format(node,newNode))
                     return False
         return True
 
@@ -129,15 +130,15 @@ class HanoiGraph():
                 countOfChanges += 1
 
         if countOfChanges > 1:
-            self.DEBUG_PRINT("Multiple move [{dst}] <- [{root}]".format(i=changedIndex, dst=dstNodeName, root=rootNode["name"]))
+            # self.DEBUG_PRINT("Multiple move [{dst}] <- [{root}]".format(i=changedIndex, dst=dstNodeName, root=rootNode["name"]))
             return False
 
         if self.isDiskLocked(rootNode, changedIndex):
-            self.DEBUG_PRINT("Disk #{i} locked [{dst}] <- [{root}]".format(i=changedIndex, dst=dstNodeName, root=rootNode["name"]))
+            # self.DEBUG_PRINT("Disk #{i} locked [{dst}] <- [{root}]".format(i=changedIndex, dst=dstNodeName, root=rootNode["name"]))
             return False
 
         if self.isDiskMoveLocked(dstNodeName, changedIndex):
-            self.DEBUG_PRINT("Disk move locked [{dst}] <- [{root}]".format(i=changedIndex, dst=dstNodeName, root=rootNode["name"]))
+            # self.DEBUG_PRINT("Disk move locked [{dst}] <- [{root}]".format(i=changedIndex, dst=dstNodeName, root=rootNode["name"]))
             return False
 
         for n in self.genDict[self.genIndex]:
@@ -152,8 +153,8 @@ class HanoiGraph():
 
         self.graph.add_edge(rootNode["name"], dstNodeName, weight=self.rodCost[int(dstNodeName[changedIndex])])
         
-        self.DEBUG_PRINT("Add node [{dst}] <-{cost}-- [{root}]".format(cost=self.rodCost[int(dstNodeName[changedIndex])],
-                                                                dst=dstNodeName, root=rootNode["name"]))
+        # self.DEBUG_PRINT("Add node [{dst}] <-{cost}-- [{root}]".format(cost=self.rodCost[int(dstNodeName[changedIndex])],
+        #                                                         dst=dstNodeName, root=rootNode["name"]))
         return True
 
     # если есть диск с меньшим индексом на том же кольце -> текущий диск заблокирован
@@ -202,13 +203,14 @@ class HanoiGraph():
         plt.show() 
 
     def calcCostDeijkstra(self, src, dst):
+        self.DEBUG_PRINT("Start pathfinder - Deijkstra")
         srcNode = str(src) * self.diskCount
         dstNode = str(dst) * self.diskCount
-        print(srcNode + "-D>" + dstNode)
+        self.DEBUG_PRINT(srcNode + "-D>" + dstNode)
         self.orderCost, self.orderPath = nx.single_source_dijkstra(self.graph, srcNode, dstNode)
 
 if __name__ == "__main__": 
-    FILENAME = "solver_test/20d3r.txt" 
+    FILENAME = "solver_test/10d5r.txt" 
     # FILENAME = "good_test/t4.txt" 
 
 
@@ -222,7 +224,7 @@ if __name__ == "__main__":
     # order, sizeOrder, returnErr = parser.ReadOrder(FILENAME)
     if err == 'OK':
         sw = StopWatch()
-        graph = HanoiGraph(diskCount, diskCost, debugLevel=1)
+        graph = HanoiGraph(diskCount, diskCost, debugLevel=0)
         sw.stop()
 
         graph.exportGen("hg_out.txt")

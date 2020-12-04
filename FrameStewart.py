@@ -15,4 +15,4 @@ def FrameStewart(ndisks,npegs):
 
 a = int(input("Disks [>] "))
 b = int(input("rods [>] "))
-print(FrameStewart(a, b)) #prints 161 
+print(FrameStewart(a, b)) 
