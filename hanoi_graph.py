@@ -64,17 +64,41 @@ class HanoiGraph():
         diskPlaced = False
         # для каждой ноды в текущем поколении
         for node in self.genDict[genIndex]:
+
+            srcBlocked = False
+            dstBlocked = False
             # для каждого диска в ноде берем все возможные/невозможные варианты
             for i in range(0,len(node) - self.placedDiskCount): # без уже поставленных на место дисков
+                for j in range(0,i):
+                    if node[j] == node[i]:
+                        srcBlocked = True
+                        break
+                if srcBlocked:
+                    srcBlocked = False
+                    continue
+        
                 for r in self.rodRange:
                     if r != int(node[i]):        # если возможна замена, меняем i-й элемент 
                         if i == (len(node) - 1): # !check boundary cases!
                             repl = node[:i] + str(r)
+                            for k in range(0,i):
+                                if node[k] == str(r):
+                                    dstBlocked = True
+                                    break
                         elif i == 0:
                             repl = str(r) + node[1:]
                         else:
                             repl = node[:i] + str(r) + node[i+1:] 
+                            for k in range(0,i):
+                                if node[k] == str(r):
+                                    dstBlocked = True
+                                    break
                         # print(node + "->" + repl + " gen " + str(genIndex)) 
+
+                        if dstBlocked:
+                            dstBlocked = False
+                            continue
+                       
 
                         # если такая нода возможна, добавляем ее
                         res = True
@@ -134,13 +158,13 @@ class HanoiGraph():
             # self.DEBUG_PRINT("Multiple move [{dst}] <- [{root}]".format(i=changedIndex, dst=dstNodeName, root=rootNode["name"]))
             return False
 
-        if self.isDiskLocked(rootNode, changedIndex):
-            # self.DEBUG_PRINT("Disk #{i} locked [{dst}] <- [{root}]".format(i=changedIndex, dst=dstNodeName, root=rootNode["name"]))
-            return False
+        # if self.isDiskLocked(rootNode, changedIndex):
+        #     # self.DEBUG_PRINT("Disk #{i} locked [{dst}] <- [{root}]".format(i=changedIndex, dst=dstNodeName, root=rootNode["name"]))
+        #     return False
 
-        if self.isDiskMoveLocked(dstNodeName, changedIndex):
-            # self.DEBUG_PRINT("Disk move locked [{dst}] <- [{root}]".format(i=changedIndex, dst=dstNodeName, root=rootNode["name"]))
-            return False
+        # if self.isDiskMoveLocked(dstNodeName, changedIndex):
+        #     # self.DEBUG_PRINT("Disk move locked [{dst}] <- [{root}]".format(i=changedIndex, dst=dstNodeName, root=rootNode["name"]))
+        #     return False
 
         for n in self.genDict[self.genIndex]:
             if self.graph.nodes[n]["name"] == dstNodeName:
