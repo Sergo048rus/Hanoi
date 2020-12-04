@@ -210,6 +210,7 @@ class HanoiGraph():
         self.DEBUG_PRINT(srcNode + "-D>" + dstNode)
         self.orderCost, self.orderPath = nx.single_source_dijkstra(self.graph, srcNode, dstNode)
 
+
 if __name__ == "__main__": 
     FOLDERNAME = "solver_test/"
     FILENAME = "6d4r.txt" 
