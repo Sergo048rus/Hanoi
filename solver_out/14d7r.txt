@@ -1,0 +1,10 @@
+INIT
+NPARTS 14
+/
+
+COST
+2 3 3 5 10 10 800
+/
+
+ORDER
+/

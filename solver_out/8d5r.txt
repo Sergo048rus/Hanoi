@@ -1,0 +1,10 @@
+INIT
+NPARTS 8
+/
+
+COST
+2 3 3 100 1000
+/
+
+ORDER
+/
