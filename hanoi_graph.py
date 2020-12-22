@@ -237,9 +237,23 @@ class HanoiGraph():
         self.DEBUG_PRINT(srcNode + "-D>" + dstNode)
         self.orderCost, self.orderPath = nx.single_source_dijkstra(self.graph, srcNode, dstNode)
 
+    def calcCostBF(self, src, dst):
+        self.DEBUG_PRINT("Start pathfinder - Bellman-Ford")
+        srcNode = str(src) * self.diskCount
+        dstNode = str(dst) * self.diskCount
+        self.DEBUG_PRINT(srcNode + "-D>" + dstNode)
+        self.orderCost, self.orderPath = nx.single_source_bellman_ford(self.graph, srcNode, dstNode)
+
+    # def calcCostAstar(self, src, dst):
+    #     self.DEBUG_PRINT("Start pathfinder - A*")
+    #     srcNode = str(src) * self.diskCount
+    #     dstNode = str(dst) * self.diskCount
+    #     self.DEBUG_PRINT(srcNode + "-D>" + dstNode)
+    #     self.orderCost, self.orderPath = nx.single_source_bellman_ford(self.graph, srcNode, dstNode)
+    
 
 if __name__ == "__main__": 
-    FILENAME = "10d5r.txt"
+    FILENAME = "6d4r.txt"
 
     if len(sys.argv) < 2:
         print("WARN! Use predefined value!")   
@@ -269,7 +283,9 @@ if __name__ == "__main__":
         graph.exportGen(exportPath)
         # graph.draw()
 
-        graph.calcCostDeijkstra(0,1) 
+        sw = StopWatch()
+        graph.calcCostBF(0,1) 
+        sw.stop()
         print("Shortest path: {0}".format(graph.orderPath))
         print("Total cost: {0}".format(graph.orderCost))
 

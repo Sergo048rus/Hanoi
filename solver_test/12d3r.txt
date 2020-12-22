@@ -1,0 +1,10 @@
+INIT
+NPARTS 12
+/
+
+COST
+2 3 3
+/
+
+ORDER
+/
