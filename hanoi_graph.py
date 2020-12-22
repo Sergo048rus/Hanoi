@@ -103,13 +103,14 @@ class HanoiGraph():
 
                         # если такая нода возможна, добавляем ее
                         res = True
-                        for newNode in newGen: # дупликат из новых
-                            if newNode == repl:
-                                res = False
-                        if res:        
+                        # for newNode in newGen: # дупликат из новых # w/o 2.89sec, with 3.49sec
+                        #     if newNode == repl:
+                        #         res = False
+                        # if res:        
                             #res = self.checkGenDict(genIndex, repl) # проверяем, что новая нода не из предыдущих поколений
-                            if self.graph.has_node(repl):
-                                res = False
+                        # if res:
+                        if self.graph.has_node(repl):
+                            res = False
                         if res:
                             res = self.tryToAddNode(self.graph.nodes[node], repl, i) # пробуем добавить
                         if res: 
@@ -253,7 +254,7 @@ class HanoiGraph():
     
 
 if __name__ == "__main__": 
-    FILENAME = "6d4r.txt"
+    FILENAME = "10d3r.txt"
 
     if len(sys.argv) < 2:
         print("WARN! Use predefined value!")   
