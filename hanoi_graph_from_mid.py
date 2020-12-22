@@ -1,5 +1,4 @@
 import os
-import sys
 import networkx as nx
 import matplotlib.pyplot as plt 
 
@@ -107,11 +106,9 @@ class HanoiGraph():
                             if newNode == repl:
                                 res = False
                         if res:        
-                            #res = self.checkGenDict(genIndex, repl) # проверяем, что новая нода не из предыдущих поколений
-                            if self.graph.has_node(repl):
-                                res = False
+                            res = self.checkGenDict(genIndex, repl) # проверяем, что новая нода не из предыдущих поколений
                         if res:
-                            res = self.tryToAddNode(self.graph.nodes[node], repl, i) # пробуем добавить
+                            res = self.tryToAddNode(self.graph.nodes[node], repl) # пробуем добавить
                         if res: 
                             newGen.append(repl) 
                             if repl[-1 - self.placedDiskCount] == targetRode and repl[-1 - self.placedDiskCount + 1] == targetRode:
@@ -149,17 +146,17 @@ class HanoiGraph():
                 fos.write("gen #{0}: {1}\r\n".format(k,self.genDict[k]))
 
     # добавляет ноду со связью, если это возможно
-    def tryToAddNode(self, rootNode, dstNodeName, index):
-        # countOfChanges = 0
-        # changedIndex = 0
-        # for i in range(0, self.diskCount):
-        #     if rootNode["name"][i] != dstNodeName[i]:
-        #         changedIndex = i
-        #         countOfChanges += 1
+    def tryToAddNode(self, rootNode, dstNodeName):
+        countOfChanges = 0
+        changedIndex = 0
+        for i in range(0, self.diskCount):
+            if rootNode["name"][i] != dstNodeName[i]:
+                changedIndex = i
+                countOfChanges += 1
 
-        # if countOfChanges > 1:
-        #     # self.DEBUG_PRINT("Multiple move [{dst}] <- [{root}]".format(i=changedIndex, dst=dstNodeName, root=rootNode["name"]))
-        #     return False
+        if countOfChanges > 1:
+            # self.DEBUG_PRINT("Multiple move [{dst}] <- [{root}]".format(i=changedIndex, dst=dstNodeName, root=rootNode["name"]))
+            return False
 
         # if self.isDiskLocked(rootNode, changedIndex):
         #     # self.DEBUG_PRINT("Disk #{i} locked [{dst}] <- [{root}]".format(i=changedIndex, dst=dstNodeName, root=rootNode["name"]))
@@ -169,17 +166,17 @@ class HanoiGraph():
         #     # self.DEBUG_PRINT("Disk move locked [{dst}] <- [{root}]".format(i=changedIndex, dst=dstNodeName, root=rootNode["name"]))
         #     return False
 
-        # for n in self.genDict[self.genIndex]:
-        #     if self.graph.nodes[n]["name"] == dstNodeName:
-        #         self.DEBUG_PRINT("Node [{0}] exists, add edge".format(dstNodeName))
-        #         self.graph.add_edge(rootNode, n, weight=self.rodCost[int(dstNodeName[changedIndex])])
-        #         return False
+        for n in self.genDict[self.genIndex]:
+            if self.graph.nodes[n]["name"] == dstNodeName:
+                self.DEBUG_PRINT("Node [{0}] exists, add edge".format(dstNodeName))
+                self.graph.add_edge(rootNode, n, weight=self.rodCost[int(dstNodeName[changedIndex])])
+                return False
 
-        self.graph.add_node(dstNodeName, color=self.ORDINARY_NODE_COLOR, # create node int(index)
-                                         weight=self.rodCost[int(dstNodeName[index])],
+        self.graph.add_node(dstNodeName, color=self.ORDINARY_NODE_COLOR, # create node
+                                         weight=self.rodCost[int(dstNodeName[changedIndex])],
                                          name=dstNodeName) 
 
-        self.graph.add_edge(rootNode["name"], dstNodeName, weight=self.rodCost[int(dstNodeName[index])])
+        self.graph.add_edge(rootNode["name"], dstNodeName, weight=self.rodCost[int(dstNodeName[changedIndex])])
         
         # self.DEBUG_PRINT("Add node [{dst}] <-{cost}-- [{root}]".format(cost=self.rodCost[int(dstNodeName[changedIndex])],
         #                                                         dst=dstNodeName, root=rootNode["name"]))
@@ -239,17 +236,8 @@ class HanoiGraph():
 
 
 if __name__ == "__main__": 
-    FILENAME = "10d3r.txt"
-
-    if len(sys.argv) < 1:
-        print("WARN! Use predefined value!")   
-    else:
-        if "hanoi_graph.py" in str(sys.argv[0]):
-            print("WARN! Detect VS Code, use predefined value!")
-        else:
-            FILENAME = str(sys.argv[0])
-
     FOLDERNAME = "solver_test/"
+    FILENAME = "6d4r.txt" 
     FILEPATH = FOLDERNAME + FILENAME
 
     import InputTXT as par

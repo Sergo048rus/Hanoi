@@ -1,0 +1,10 @@
+INIT
+NPARTS 6
+/
+
+COST
+1 4 2 3
+/
+
+ORDER
+/
