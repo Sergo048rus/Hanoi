@@ -251,7 +251,31 @@ class HanoiGraph():
     #     dstNode = str(dst) * self.diskCount
     #     self.DEBUG_PRINT(srcNode + "-D>" + dstNode)
     #     self.orderCost, self.orderPath = nx.single_source_bellman_ford(self.graph, srcNode, dstNode)
-    
+
+def exportPathToFile(filepath, path, cost):
+    with open(str(filepath), "w", encoding="utf-8") as fos:
+        fos.write("=== Hanoi pathfinder result ===\r\n")
+        fos.write("Cost: {0}\r\n".format(cost))
+        fos.write("Path:\r\n")
+        for move in path:
+            fos.write("{0}\n".format(move))
+
+def exportPathToFileAlternate(filepath, path, cost):
+    with open(str(filepath), "w", encoding="utf-8") as fos:
+        fos.write("=== Hanoi pathfinder result ===\r\n")
+        fos.write("Cost: {0}\r\n".format(cost))
+        fos.write("Path:\r\n")
+        for i in range(1,len(path)):
+            disk,src,dst = "","",""
+            for j in range(0,len(path[i])):
+                if path[i][j] != path[i-1][j]:
+                    disk = j
+                    src = path[i-1][j]
+                    dst = path[i][j]
+                    break
+            fos.write("{0} {1} {2}\n".format(disk, src, dst))
+        
+        
 
 if __name__ == "__main__": 
     FILENAME = "10d3r.txt"
@@ -273,8 +297,8 @@ if __name__ == "__main__":
     diskCount, column, diskCost, err = parser.ReadDisk(FILEPATH)
     print('TESTFILE: %s' % (FILEPATH))
     print(' DiskCount = ',diskCount,'\n','Column = ', column,'\n','Err = ', err,'\n', 'Cost', diskCost)
-
     # order, sizeOrder, returnErr = parser.ReadOrder(FILENAME)
+
     if err == 'OK':
         sw = StopWatch()
         graph = HanoiGraph(diskCount, diskCost, debugLevel=0)
@@ -287,6 +311,13 @@ if __name__ == "__main__":
         sw = StopWatch()
         graph.calcCostBF(0,1) 
         sw.stop()
-        print("Shortest path: {0}".format(graph.orderPath))
+
+        # один формат наш, другой Васекина, можно оставить любой или выпилить все для скорости
+        exportPath1 = os.path.abspath(os.path.dirname(os.path.abspath(__file__)) + ("/solver_out/{0}_path.txt".format(FILENAME.split('.')[0])))
+        exportPath2 = os.path.abspath(os.path.dirname(os.path.abspath(__file__)) + ("/solver_out/{0}_path2.txt".format(FILENAME.split('.')[0])))
+        exportPathToFile(exportPath1, graph.orderPath, graph.orderCost)
+        # exportPathToFileAlternate(exportPath2, graph.orderPath, graph.orderCost)
+
+        # print("Shortest path: {0}".format(graph.orderPath))
         print("Total cost: {0}".format(graph.orderCost))
 
