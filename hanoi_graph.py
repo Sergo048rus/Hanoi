@@ -106,7 +106,9 @@ class HanoiGraph():
                             if newNode == repl:
                                 res = False
                         if res:        
-                            res = self.checkGenDict(genIndex, repl) # проверяем, что новая нода не из предыдущих поколений
+                            #res = self.checkGenDict(genIndex, repl) # проверяем, что новая нода не из предыдущих поколений
+                            if repl in self.graph:
+                                res = False
                         if res:
                             res = self.tryToAddNode(self.graph.nodes[node], repl, i) # пробуем добавить
                         if res: 
