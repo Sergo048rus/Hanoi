@@ -239,15 +239,15 @@ class HanoiGraph():
 
 
 if __name__ == "__main__": 
-    FILENAME = "10d3r.txt"
+    FILENAME = "10d5r.txt"
 
-    if len(sys.argv) < 1:
+    if len(sys.argv) < 2:
         print("WARN! Use predefined value!")   
     else:
-        if "hanoi_graph.py" in str(sys.argv[0]):
+        if "hanoi_graph.py" in str(sys.argv[1]):
             print("WARN! Detect VS Code, use predefined value!")
         else:
-            FILENAME = str(sys.argv[0])
+            FILENAME = str(sys.argv[1])
 
     FOLDERNAME = "solver_test/"
     FILEPATH = FOLDERNAME + FILENAME
