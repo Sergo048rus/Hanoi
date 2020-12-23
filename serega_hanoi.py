@@ -60,7 +60,7 @@ def pyramid_7(rodCost,dst_rod):                # Собираем пирамид
     cost = cost_end+cost_dst
     return cost, path_dst,path_end
 
-def pyramid_8(rodCost,dst_rod):                # Собираем пирамиду из 7 дисков на одном штыре
+def pyramid_8(rodCost,dst_rod):                # Собираем пирамиду из 8 дисков на одном штыре
     cost_dst, path_dst = solver.BuildPath(8, rodCost, 0, dst_rod,False)
     cost_end, path_end = solver.BuildPath(8, rodCost, dst_rod, 1,False)
     cost = cost_end+cost_dst
@@ -133,21 +133,31 @@ def pyramid_xx(diskCount,rodCost,dst_rod,pyr1,pyr2):
     sw.stop()
     return cost,path_dst,path_end,diskCount
 
-def hanoi_gr_pre(diskCount, rodCostList,dst_rod):
+def hanoi_gr_pre(diskCount, rodCostList,dst_rod,stage_param):
     __maxStage = 20
+    if stage_param == 1:
+        range_maxStage = range(0,int(__maxStage/2))
+    elif stage_param == 2:
+        range_maxStage = range(__maxStage/2,__maxStage)
+    elif stage_param == 3:
+        range_maxStage = range(__maxStage-5,__maxStage)
+    elif stage_param == 4:
+        range_maxStage = range(__maxStage-15,__maxStage-5)
+    else:
+       range_maxStage = range(0,__maxStage)
     rodCount = len(rodCostList)
     rodCost = rodCostList
 
-    stageCost = [0 for _ in range(0,__maxStage)]
+    stageCost = [0 for _ in range_maxStage]
 
     sort_rod(rodCost)
 
     print(rodCost)
     rodCost_sort = copy.deepcopy(rodCost)
     if len(rodCost_sort) > 3 and diskCount > 6:
-        for stage in range(__maxStage):
+        for stage in range_maxStage:
             rodCost = copy.deepcopy(rodCost_sort)
-
+            sw_stage = StopWatch()
             cost = 0
             path = []
             cost_pyro,path_dst,path_end,diskCountCurr = condition_check(diskCount,rodCost,dst_rod,stage)              # необходимо разобрться какие условия и сколько строить башен
@@ -158,6 +168,7 @@ def hanoi_gr_pre(diskCount, rodCostList,dst_rod):
                 path = path_dst+path_graph+path_end
                 print(cost, path)
                 stageCost[stage] = cost
+                sw_stage.stop()
                 # один формат наш, другой Васекина, можно оставить любой или выпилить все для скорости
                 FILENAME_OUT = FILENAME.split('.')[0]+'_'+str(dst_rod)+'_'+str(stage)
                 exportPath1 = os.path.abspath(os.path.dirname(os.path.abspath(__file__)) + ("/solver_out/{0}_path.txt".format(FILENAME_OUT)))
@@ -168,12 +179,13 @@ def hanoi_gr_pre(diskCount, rodCostList,dst_rod):
                 print("Total cost: {0}".format(cost))
                 
     else:           # Альтернатвное решение без подбашен
+        sw_alt = StopWatch()
         cost, path = solveGraph(rodCost_sort,rodCost)
 
         print(cost, path)
         
         # один формат наш, другой Васекина, можно оставить любой или выпилить все для скорости
-        
+        sw_alt.stop()
         exportPath1 = os.path.abspath(os.path.dirname(os.path.abspath(__file__)) + ("/solver_out/{0}_path.txt".format(FILENAME.split('.')[0])))
         exportPath2 = os.path.abspath(os.path.dirname(os.path.abspath(__file__)) + ("/solver_out/{0}_path2.txt".format(FILENAME.split('.')[0])))
         solver.exportPathToFile(exportPath1, path, cost)
@@ -185,7 +197,7 @@ def hanoi_gr_pre(diskCount, rodCostList,dst_rod):
     print("Stage cost")
     stageName = ['1 pyr 3','1 pyr 4','1 pyr 5','1 pyr 6','2 pyr 66','2 pyr 65','2 pyr 64','2 pyr 63','2 pyr 55','2 pyr 54','2 pyr 53','2 pyr 44',
                 '2 pyr 43','2 pyr 33','1 pyr 7','2 pyr 77','2 pyr 76','2 pyr 75','2 pyr 74','2 pyr 73']
-    for i in range(__maxStage):
+    for i in range_maxStage:
         print("Stage ",stageName[i],":\t {0}".format(stageCost[i]))
 
     
@@ -287,12 +299,12 @@ def condition_check(diskCount,rodCost,dst_rod,stage):                          #
         else:
             print('STAGE 15: ERR count disk')
     if stage == 16:
-        if diskCount > 15 and diskCount < 18:
+        if diskCount > 15:
            return pyramid_xx(diskCount,rodCost,dst_rod,7,6)
         else:
             print('STAGE 16: ERR count disk')
     if stage == 17:
-        if diskCount > 15 and diskCount < 18:
+        if diskCount > 15:
            return pyramid_xx(diskCount,rodCost,dst_rod,7,5)
         else:
             print('STAGE 16: ERR count disk')
@@ -331,9 +343,9 @@ if __name__ == "__main__":
     
 
     dst_rod = 3
+    stage_param = 10000
 
-
-    if len(sys.argv) < 3:
+    if len(sys.argv) < 4:
         print("WARN! Use predefined value!")   
     else:
         if "hanoi_graph.py" in str(sys.argv[1]):
@@ -341,6 +353,7 @@ if __name__ == "__main__":
         else:
             FILENAME = str(sys.argv[1])
             dst_rod = int(sys.argv[2])
+            stage_param = int(sys.argv[3])
 
 
     FILEPATH = FOLDERNAME + FILENAME
@@ -354,7 +367,7 @@ if __name__ == "__main__":
     # order, sizeOrder, returnErr = parser.ReadOrder(FILENAME)
     if err == 'OK':
         sw = StopWatch()
-        hanoi_gr_pre(diskCount, diskCost,dst_rod)
+        hanoi_gr_pre(diskCount, diskCost,dst_rod,stage_param)
         sw.stop()
 
         
