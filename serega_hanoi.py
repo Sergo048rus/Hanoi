@@ -1,6 +1,6 @@
 import os
-import networkx as nx
-import matplotlib.pyplot as plt 
+import hanoi_graph_mod as solver
+
 
 from stopwatch import StopWatch
 
@@ -61,14 +61,34 @@ class hanoi_gr_pre():
         self.rodCost.insert(0,rod_pyr_base)          # отсортированная стоимость с зафиксирванным начальным штырем
 
 
+    def solveGraph(self):               #Вызываем граф для итогого решения
+        cost, path = solver.BuildPath(self.diskCount,self.rodCost,0,1)
+        return cost, path
 
-    def pyramid_3(self):                # Собираем пирамиду из 3 дисков на одном штыре 
-        pass
+    def pyramid_3(self,dst_rod):                # Собираем пирамиду из 3 дисков на одном штыре 
+        cost_dst, path_dst = solver.BuildPath(3,self.rodCost,0,dst_rod)
+        cost_end, path_end = solver.BuildPath(3, self.rodCost, dst_rod, 1)
+        cost = cost_end+cost_dst
+        return cost, path_dst,path_end
 
-    def pyramid_4(self):                # Собираем пирамиду из 4 дисков на одном штыре
-        pass
+
+    def pyramid_4(self,dst_rod):                # Собираем пирамиду из 4 дисков на одном штыре
+        cost_dst, path_dst = solver.BuildPath(4, self.rodCost, 0, dst_rod)
+        cost_end, path_end = solver.BuildPath(4, self.rodCost, dst_rod, 1)
+        cost = cost_end+cost_dst
+        return cost, path_dst,path_end
     
+    def pyramid_5(self,dst_rod):                # Собираем пирамиду из 3 дисков на одном штыре 
+        cost_dst, path_dst = solver.BuildPath(5, self.rodCost, 0, dst_rod)
+        cost_end, path_end = solver.BuildPath(5, self.rodCost, dst_rod, 1)
+        cost = cost_end+cost_dst
+        return cost, path_dst,path_end
 
+    def pyramid_6(self,dst_rod):                # Собираем пирамиду из 4 дисков на одном штыре
+        cost_dst, path_dst = solver.BuildPath(6, self.rodCost, 0, dst_rod)
+        cost_end, path_end = solver.BuildPath(6, self.rodCost, dst_rod, 1)
+        cost = cost_end+cost_dst
+        return cost, path_dst,path_end
 
 
 
