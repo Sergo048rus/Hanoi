@@ -158,7 +158,7 @@ def condition_check(diskCount,rodCost,dst_rod,stage):                          #
     while len(rodCost)>diskCount:                                # Убираем самые дорогие штыри пока количество штыре не будет равно или меньше дисков
         rodCost.pop()
     if stage == 0:
-        if diskCount < 12:
+        if diskCount < 11:
             cost,path_dst,path_end = pyramid_3(rodCost,dst_rod)
             rodCost.pop(dst_rod)
             diskCount-=3
@@ -166,7 +166,7 @@ def condition_check(diskCount,rodCost,dst_rod,stage):                          #
         else:
             print('STAGE 0: ERR count disk')
     if stage == 1:
-        if diskCount > 8 and diskCount < 16:
+        if diskCount > 8 and diskCount < 13:
             cost,path_dst,path_end = pyramid_4(rodCost,dst_rod)
             rodCost.pop(dst_rod)
             diskCount-=4
@@ -174,7 +174,7 @@ def condition_check(diskCount,rodCost,dst_rod,stage):                          #
         else:
             print('STAGE 1: ERR count disk')
     if stage == 2:
-        if (diskCount > 9 and diskCount < 16) or len(rodCost)==4:
+        if (diskCount > 9 and diskCount < 14) or len(rodCost)==4:
             cost,path_dst,path_end = pyramid_5(rodCost,dst_rod)
             rodCost.pop(dst_rod)
             diskCount-=5
@@ -182,7 +182,7 @@ def condition_check(diskCount,rodCost,dst_rod,stage):                          #
         else:
             print('STAGE 2: ERR count disk')
     if stage == 3:
-        if (diskCount > 9 and diskCount < 16) or len(rodCost)==4:                
+        if (diskCount > 9 and diskCount < 15) or len(rodCost)==4:                
             cost,path_dst,path_end = pyramid_6(rodCost,dst_rod)
             rodCost.pop(dst_rod)
             diskCount-=6
@@ -259,7 +259,7 @@ if __name__ == "__main__":
     
 
     dst_rod = 3
-    # dst_rod = int('3')
+
 
     if len(sys.argv) < 3:
         print("WARN! Use predefined value!")   
