@@ -132,7 +132,7 @@ def hanoi_gr_pre(diskCount, rodCostList,dst_rod):
                 print(cost, path)
                 stageCost[stage] = cost
                 # один формат наш, другой Васекина, можно оставить любой или выпилить все для скорости
-                FILENAME_OUT = FILENAME.split('.')[0]+'_'+str(stage)
+                FILENAME_OUT = FILENAME.split('.')[0]+'_'+str(dst_rod)+'_'+str(stage)
                 exportPath1 = os.path.abspath(os.path.dirname(os.path.abspath(__file__)) + ("/solver_out/{0}_path.txt".format(FILENAME_OUT)))
                 exportPath2 = os.path.abspath(os.path.dirname(os.path.abspath(__file__)) + ("/solver_out/{0}_path2.txt".format(FILENAME_OUT)))
                 solver.exportPathToFile(exportPath1, path, cost)
@@ -156,8 +156,10 @@ def hanoi_gr_pre(diskCount, rodCostList,dst_rod):
     #Вывод стоимости на каждом этапе
     print("- - - - - - - - - - - - - - - - - - - - - - -")
     print("Stage cost")
+    stageName = ['1 pyr 3','1 pyr 4','1 pyr 5','1 pyr 6','2 pyr 66','2 pyr 65','2 pyr 64','2 pyr 63','2 pyr 55','2 pyr 54','2 pyr 53','2 pyr 44',
+                '2 pyr 43','2 pyr 33',]
     for i in range(14):
-        print("Stage ",i,":\t {0}".format(stageCost[i]))
+        print("Stage ",stageName[i],":\t {0}".format(stageCost[i]))
 
     
 def condition_check(diskCount,rodCost,dst_rod,stage):                          #выбор постоения пирамиды
