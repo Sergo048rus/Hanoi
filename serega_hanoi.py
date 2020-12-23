@@ -180,7 +180,7 @@ def hanoi_gr_pre(diskCount, rodCostList,dst_rod,stage_param):
                 
     else:           # Альтернатвное решение без подбашен
         sw_alt = StopWatch()
-        cost, path = solveGraph(rodCost_sort,rodCost)
+        cost, path = solveGraph(diskCount,rodCost)
 
         print(cost, path)
         
@@ -339,7 +339,7 @@ def condition_check(diskCount,rodCost,dst_rod,stage):                          #
 
 if __name__ == "__main__": 
     FOLDERNAME = "solver_test/"
-    FILENAME = "8d6r.txt" 
+    FILENAME = "e1.txt" 
     
 
     dst_rod = 3
