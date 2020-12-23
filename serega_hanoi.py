@@ -111,6 +111,7 @@ def hanoi_gr_pre(diskCount, rodCostList,dst_rod):
     rodCount = len(rodCostList)
     rodCost = rodCostList
 
+    stageCost = [0 for _ in range(0,14)]
 
     sort_rod(rodCost)
 
@@ -129,7 +130,7 @@ def hanoi_gr_pre(diskCount, rodCostList,dst_rod):
                 cost = cost_pyro + cost_graph
                 path = path_dst+path_graph+path_end
                 print(cost, path)
-            
+                stageCost[stage] = cost
                 # один формат наш, другой Васекина, можно оставить любой или выпилить все для скорости
                 exportPath1 = os.path.abspath(os.path.dirname(os.path.abspath(__file__)) + ("/solver_out/{0}_path.txt".format(FILENAME.split('.')[0])))
                 exportPath2 = os.path.abspath(os.path.dirname(os.path.abspath(__file__)) + ("/solver_out/{0}_path2.txt".format(FILENAME.split('.')[0])))
@@ -137,7 +138,7 @@ def hanoi_gr_pre(diskCount, rodCostList,dst_rod):
                 # exportPathToFileAlternate(exportPath2, path, cost)
 
                 print("Total cost: {0}".format(cost))
-
+                print("Stage cost: {0}".format(stageCost))
     else:           # Альтернатвное решение без подбашен
         cost, path = solveGraph(rodCost_sort,rodCost)
 
