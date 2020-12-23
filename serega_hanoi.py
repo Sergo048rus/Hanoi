@@ -138,7 +138,7 @@ def hanoi_gr_pre(diskCount, rodCostList,dst_rod):
                 # exportPathToFileAlternate(exportPath2, path, cost)
 
                 print("Total cost: {0}".format(cost))
-                print("Stage cost: {0}".format(stageCost))
+                
     else:           # Альтернатвное решение без подбашен
         cost, path = solveGraph(rodCost_sort,rodCost)
 
@@ -151,8 +151,11 @@ def hanoi_gr_pre(diskCount, rodCostList,dst_rod):
         # exportPathToFileAlternate(exportPath2, path, cost)
 
         print("Total cost: {0}".format(cost))
-
-
+    #Вывод стоимости на каждом этапе
+    print("- - - - - - - - - - - - - - - - - - - - - - -")
+    print("Stage cost")
+    for i in range(14):
+        print("Stage ",i,":\t {0}".format(stageCost[i]))
 
     
 def condition_check(diskCount,rodCost,dst_rod,stage):                          #выбор постоения пирамиды
