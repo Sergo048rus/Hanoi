@@ -85,7 +85,7 @@ def makeGen(graph, prevGen, placedCount, src, dst, diskCount, rodList):
                     graph.add_edge(node, repl, weight=rodList[r])
 
                     newGen.append(repl) 
-                    if repl[-1 - placedCount] == str(dst) and repl[-1 - placedCount + 1] == str(dst):
+                    if repl[-1 - placedCount] == str(dst): #and repl[-1 - placedCount + 1] == str(dst): #! не понял блять
                         # print(repl + ' = ' + targetRode)
                         diskPlaced = True
                                 
@@ -150,7 +150,7 @@ def exportPathToFileAlternate(filepath, path, cost):
 # MAIN
 #############################################
 if __name__ == "__main__": 
-    FILENAME = "6d4r.txt"
+    FILENAME = "6d7r.txt"
 
     if len(sys.argv) < 2:
         print("WARN! Use predefined value!")   
