@@ -132,8 +132,9 @@ def hanoi_gr_pre(diskCount, rodCostList,dst_rod):
                 print(cost, path)
                 stageCost[stage] = cost
                 # один формат наш, другой Васекина, можно оставить любой или выпилить все для скорости
-                exportPath1 = os.path.abspath(os.path.dirname(os.path.abspath(__file__)) + ("/solver_out/{0}_path.txt".format(FILENAME.split('.')[0])))
-                exportPath2 = os.path.abspath(os.path.dirname(os.path.abspath(__file__)) + ("/solver_out/{0}_path2.txt".format(FILENAME.split('.')[0])))
+                FILENAME_OUT = FILENAME.split('.')[0]+'_'+str(stage)
+                exportPath1 = os.path.abspath(os.path.dirname(os.path.abspath(__file__)) + ("/solver_out/{0}_path.txt".format(FILENAME_OUT)))
+                exportPath2 = os.path.abspath(os.path.dirname(os.path.abspath(__file__)) + ("/solver_out/{0}_path2.txt".format(FILENAME_OUT)))
                 solver.exportPathToFile(exportPath1, path, cost)
                 # exportPathToFileAlternate(exportPath2, path, cost)
 
@@ -145,6 +146,7 @@ def hanoi_gr_pre(diskCount, rodCostList,dst_rod):
         print(cost, path)
         
         # один формат наш, другой Васекина, можно оставить любой или выпилить все для скорости
+        
         exportPath1 = os.path.abspath(os.path.dirname(os.path.abspath(__file__)) + ("/solver_out/{0}_path.txt".format(FILENAME.split('.')[0])))
         exportPath2 = os.path.abspath(os.path.dirname(os.path.abspath(__file__)) + ("/solver_out/{0}_path2.txt".format(FILENAME.split('.')[0])))
         solver.exportPathToFile(exportPath1, path, cost)
