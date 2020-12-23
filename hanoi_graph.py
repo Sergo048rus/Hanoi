@@ -115,9 +115,9 @@ class HanoiGraph():
                             res = self.tryToAddNode(self.graph.nodes[node], repl, i) # пробуем добавить
                         if res: 
                             newGen.append(repl) 
-                            if repl[-1 - self.placedDiskCount] == targetRode and not diskPlaced: #and repl[-1 - self.placedDiskCount + 1] == targetRode:
-                                    # print(repl + ' = ' + targetRode)
-                                    diskPlaced = True
+                            if repl[-1 - self.placedDiskCount] == targetRode and repl[-1 - self.placedDiskCount + 1] == targetRode:
+                                # print(repl + ' = ' + targetRode)
+                                diskPlaced = True
                                 
         if diskPlaced:  
             # print('Disk SET #{0}'.format(self.placedDiskCount + 1)) 0.05488 + 0.019946 // 0.0498681068420 + 0.018913269
@@ -278,7 +278,7 @@ def exportPathToFileAlternate(filepath, path, cost):
         
 
 if __name__ == "__main__": 
-    FILENAME = "6d4r.txt"
+    FILENAME = "8d6r.txt"
 
     if len(sys.argv) < 2:
         print("WARN! Use predefined value!")   

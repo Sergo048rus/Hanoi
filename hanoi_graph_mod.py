@@ -12,7 +12,7 @@ from stopwatch import StopWatch
 Строит граф от src(int) к dst(int) возвращает стоимость(int) и путь(list) 
 Дополнительно передается количество дисков и список штырей(весов)
 '''
-def BuildPath(diskCount, rodList, src, dst):
+def BuildPath(diskCount, rodList, src, dst, isDebug):
     graph = nx.DiGraph() 
     root = str(str(src) * diskCount) # строка, потом хешируется
     graph.add_node(root, weight=rodList[0], name=root) 
@@ -25,9 +25,10 @@ def BuildPath(diskCount, rodList, src, dst):
     while not isEmpty:
         prevGen, isEmpty, placedCount = makeGen(graph, prevGen, placedCount, src, dst, diskCount, rodList)
         genCounter += 1
-        print("mkGen #{0} {1}".format(genCounter, len(prevGen)))
-
-    print("Solved!")
+        if isDebug:
+            print("mkGen #{0} {1}".format(genCounter, len(prevGen)))
+    if isDebug:
+        print("Solved!")
 
     return calcCostBF(graph, src, dst, diskCount)
 
@@ -85,7 +86,7 @@ def makeGen(graph, prevGen, placedCount, src, dst, diskCount, rodList):
                     graph.add_edge(node, repl, weight=rodList[r])
 
                     newGen.append(repl) 
-                    if repl[-1 - placedCount] == str(dst): #and repl[-1 - placedCount + 1] == str(dst): #! не понял блять
+                    if repl[-1 - placedCount] == str(dst) and repl[-1 - placedCount + 1] == str(dst): #! не понял блять
                         # print(repl + ' = ' + targetRode)
                         diskPlaced = True
                                 
@@ -106,17 +107,17 @@ def makeGen(graph, prevGen, placedCount, src, dst, diskCount, rodList):
 # Pathfinders
 #############################################
 def calcCostDeijkstra(graph, src, dst, diskCount):
-        print("Start pathfinder - Deijkstra")
+        # print("Start pathfinder - Deijkstra")
         srcNode = str(src) * diskCount
         dstNode = str(dst) * diskCount
-        print(srcNode + "-D>" + dstNode)
+        print("DK " + srcNode + "-D>" + dstNode)
         return nx.single_source_dijkstra(graph, srcNode, dstNode)
 
 def calcCostBF(graph, src, dst, diskCount):
-        print("Start pathfinder - Bellman-Ford")
+        # print("Start pathfinder - Bellman-Ford")
         srcNode = str(src) * diskCount
         dstNode = str(dst) * diskCount
-        print(srcNode + "-D>" + dstNode)
+        print("BF " + srcNode + "-D>" + dstNode)
         return nx.single_source_bellman_ford(graph, srcNode, dstNode)
 
 #############################################
@@ -150,7 +151,7 @@ def exportPathToFileAlternate(filepath, path, cost):
 # MAIN
 #############################################
 if __name__ == "__main__": 
-    FILENAME = "6d7r.txt"
+    FILENAME = "8d6r.txt"
 
     if len(sys.argv) < 2:
         print("WARN! Use predefined value!")   
@@ -173,7 +174,7 @@ if __name__ == "__main__":
 
     if err == 'OK':
         sw = StopWatch()
-        cost, path = BuildPath(diskCount, diskCost, 0, 1)
+        cost, path = BuildPath(diskCount, diskCost, 0, 1, False)
         sw.stop()
 
         print(cost, path)
