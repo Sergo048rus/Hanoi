@@ -49,9 +49,9 @@ def makeGen(graph, prevGen, placedCount, src, dst, diskCount, rodList):
                     if node[j] == node[i]:
                         srcBlocked = True
                         break
-                if srcBlocked:
-                    srcBlocked = False
-                    continue
+            if srcBlocked:
+                srcBlocked = False
+                continue
         
             for r in rodRange:
                 if r != int(node[i]):        # если возможна замена, меняем i-й элемент 
@@ -81,7 +81,7 @@ def makeGen(graph, prevGen, placedCount, src, dst, diskCount, rodList):
                     
                     # иначе добавляем
                     # print(node + "->" + repl + " i: " + str(int(node[i])))
-                    graph.add_node(repl, weight=rodList[r], name=repl) 
+                    graph.add_node(repl)#, weight=rodList[r], name=repl) 
                     graph.add_edge(node, repl, weight=rodList[r])
 
                     newGen.append(repl) 
