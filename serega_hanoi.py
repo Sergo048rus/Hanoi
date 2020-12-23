@@ -255,10 +255,11 @@ def condition_check(diskCount,rodCost,dst_rod,stage):                          #
 
 if __name__ == "__main__": 
     FOLDERNAME = "solver_test/"
-    FILENAME = "20d10r.txt" 
+    FILENAME = "8d6r.txt" 
     
 
     dst_rod = 3
+    # dst_rod = int('3')
 
     if len(sys.argv) < 3:
         print("WARN! Use predefined value!")   
@@ -267,7 +268,7 @@ if __name__ == "__main__":
             print("WARN! Detect VS Code, use predefined value!")
         else:
             FILENAME = str(sys.argv[1])
-            dst_rod = sys.argv[2]
+            dst_rod = int(sys.argv[2])
 
 
     FILEPATH = FOLDERNAME + FILENAME
