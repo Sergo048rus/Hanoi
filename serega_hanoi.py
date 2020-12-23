@@ -42,15 +42,27 @@ def pyramid_4(rodCost,dst_rod):                # Собираем пирамид
     cost = cost_end+cost_dst
     return cost, path_dst,path_end
 
-def pyramid_5(rodCost,dst_rod):                # Собираем пирамиду из 3 дисков на одном штыре 
+def pyramid_5(rodCost,dst_rod):                # Собираем пирамиду из 5 дисков на одном штыре 
     cost_dst, path_dst = solver.BuildPath(5, rodCost, 0, dst_rod,False)
     cost_end, path_end = solver.BuildPath(5, rodCost, dst_rod, 1,False)
     cost = cost_end+cost_dst
     return cost, path_dst,path_end
 
-def pyramid_6(rodCost,dst_rod):                # Собираем пирамиду из 4 дисков на одном штыре
+def pyramid_6(rodCost,dst_rod):                # Собираем пирамиду из 6 дисков на одном штыре
     cost_dst, path_dst = solver.BuildPath(6, rodCost, 0, dst_rod,False)
     cost_end, path_end = solver.BuildPath(6, rodCost, dst_rod, 1,False)
+    cost = cost_end+cost_dst
+    return cost, path_dst,path_end
+
+def pyramid_7(rodCost,dst_rod):                # Собираем пирамиду из 7 дисков на одном штыре
+    cost_dst, path_dst = solver.BuildPath(7, rodCost, 0, dst_rod,False)
+    cost_end, path_end = solver.BuildPath(7, rodCost, dst_rod, 1,False)
+    cost = cost_end+cost_dst
+    return cost, path_dst,path_end
+
+def pyramid_8(rodCost,dst_rod):                # Собираем пирамиду из 7 дисков на одном штыре
+    cost_dst, path_dst = solver.BuildPath(8, rodCost, 0, dst_rod,False)
+    cost_end, path_end = solver.BuildPath(8, rodCost, dst_rod, 1,False)
     cost = cost_end+cost_dst
     return cost, path_dst,path_end
 
@@ -64,8 +76,15 @@ def pyramid_xx(diskCount,rodCost,dst_rod,pyr1,pyr2):
     path_end_1 = []
 
     sw = StopWatch()
-    
-    if pyr1 == 6:
+    if pyr1 == 8:
+        cost,path_dst,path_end = pyramid_8(rodCost,dst_rod)
+        rodCost.pop(dst_rod)
+        diskCount-=8
+    elif pyr1 == 7:
+        cost,path_dst,path_end = pyramid_7(rodCost,dst_rod)
+        rodCost.pop(dst_rod)
+        diskCount-=7
+    elif pyr1 == 6:
         cost,path_dst,path_end = pyramid_6(rodCost,dst_rod)
         rodCost.pop(dst_rod)
         diskCount-=6
@@ -82,7 +101,15 @@ def pyramid_xx(diskCount,rodCost,dst_rod,pyr1,pyr2):
         rodCost.pop(dst_rod)
         diskCount-=3
 
-    if pyr2 == 6:
+    if pyr2 == 8:
+        cost_1,path_dst_1,path_end_1 = pyramid_8(rodCost,dst_rod)
+        rodCost.pop(dst_rod)
+        diskCount-=8
+    elif pyr2 == 7:
+        cost_1,path_dst_1,path_end_1 = pyramid_7(rodCost,dst_rod)
+        rodCost.pop(dst_rod)
+        diskCount-=7
+    elif pyr2 == 6:
         cost_1,path_dst_1,path_end_1 = pyramid_6(rodCost,dst_rod)
         rodCost.pop(dst_rod)
         diskCount-=6
@@ -107,18 +134,18 @@ def pyramid_xx(diskCount,rodCost,dst_rod,pyr1,pyr2):
     return cost,path_dst,path_end,diskCount
 
 def hanoi_gr_pre(diskCount, rodCostList,dst_rod):
-    
+    __maxStage = 20
     rodCount = len(rodCostList)
     rodCost = rodCostList
 
-    stageCost = [0 for _ in range(0,14)]
+    stageCost = [0 for _ in range(0,__maxStage)]
 
     sort_rod(rodCost)
 
     print(rodCost)
     rodCost_sort = copy.deepcopy(rodCost)
     if len(rodCost_sort) > 3 and diskCount > 6:
-        for stage in range(14):
+        for stage in range(__maxStage):
             rodCost = copy.deepcopy(rodCost_sort)
 
             cost = 0
@@ -157,14 +184,13 @@ def hanoi_gr_pre(diskCount, rodCostList,dst_rod):
     print("- - - - - - - - - - - - - - - - - - - - - - -")
     print("Stage cost")
     stageName = ['1 pyr 3','1 pyr 4','1 pyr 5','1 pyr 6','2 pyr 66','2 pyr 65','2 pyr 64','2 pyr 63','2 pyr 55','2 pyr 54','2 pyr 53','2 pyr 44',
-                '2 pyr 43','2 pyr 33',]
-    for i in range(14):
+                '2 pyr 43','2 pyr 33','1 pyr 7','2 pyr 77','2 pyr 76','2 pyr 75','2 pyr 74','2 pyr 73']
+    for i in range(__maxStage):
         print("Stage ",stageName[i],":\t {0}".format(stageCost[i]))
 
     
 def condition_check(diskCount,rodCost,dst_rod,stage):                          #выбор постоения пирамиды
-    while len(rodCost)>diskCount:                                # Убираем самые дорогие штыри пока количество штыре не будет равно или меньше дисков
-        rodCost.pop()
+
     if stage == 0:
         if diskCount < 11:
             cost,path_dst,path_end = pyramid_3(rodCost,dst_rod)
@@ -203,7 +229,7 @@ def condition_check(diskCount,rodCost,dst_rod,stage):                          #
         else:
             print('STAGE 4: ERR count disk')
     if stage == 5:
-        if diskCount > 14:
+        if diskCount > 14 and diskCount < 19:
             return pyramid_xx(diskCount,rodCost,dst_rod,6,5)
         else:
             print('STAGE 5: ERR count disk')
@@ -247,6 +273,44 @@ def condition_check(diskCount,rodCost,dst_rod,stage):                          #
            return pyramid_xx(diskCount,rodCost,dst_rod,3,3)
         else:
             print('STAGE 13: ERR count disk')
+    if stage == 14:
+        if diskCount > 8 and diskCount < 16:
+            cost,path_dst,path_end = pyramid_7(rodCost,dst_rod)
+            rodCost.pop(dst_rod)
+            diskCount-=6
+            return cost,path_dst,path_end,diskCount
+        else:
+            print('STAGE 14: ERR count disk')
+    if stage == 15:
+        if diskCount > 16:
+           return pyramid_xx(diskCount,rodCost,dst_rod,7,7)
+        else:
+            print('STAGE 15: ERR count disk')
+    if stage == 16:
+        if diskCount > 15 and diskCount < 18:
+           return pyramid_xx(diskCount,rodCost,dst_rod,7,6)
+        else:
+            print('STAGE 16: ERR count disk')
+    if stage == 17:
+        if diskCount > 15 and diskCount < 18:
+           return pyramid_xx(diskCount,rodCost,dst_rod,7,5)
+        else:
+            print('STAGE 16: ERR count disk')
+    if stage == 18:
+        if diskCount > 14 and diskCount < 18:
+           return pyramid_xx(diskCount,rodCost,dst_rod,7,4)
+        else:
+            print('STAGE 18: ERR count disk')
+    if stage == 19:
+        if diskCount > 13 and diskCount < 17:
+           return pyramid_xx(diskCount,rodCost,dst_rod,7,3)
+        else:
+            print('STAGE 19: ERR count disk')
+
+
+    #!Делаем это в конце так как подбашни могу уменьшить число дисков так, что станет меньше, чем штырей
+    while len(rodCost)>diskCount:                                # Убираем самые дорогие штыри пока количество штыре не будет равно или меньше дисков
+        rodCost.pop()
 
     cost = 0
     path_dst = []
