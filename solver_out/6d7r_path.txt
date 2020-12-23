@@ -1,6 +1,6 @@
-=== Hanoi pathfinder result ===
-Cost: 37
-Path:
+=== Hanoi pathfinder result ===
+Cost: 37
+Path:
 000000
 200000
 230000
