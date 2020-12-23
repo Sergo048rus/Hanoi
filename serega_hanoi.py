@@ -345,8 +345,14 @@ if __name__ == "__main__":
     dst_rod = 3
     stage_param = 10000
 
-    if len(sys.argv) < 4:
+    if len(sys.argv) < 3:
         print("WARN! Use predefined value!")   
+    elif len(sys.argv) < 4:
+        if "hanoi_graph.py" in str(sys.argv[1]):
+            print("WARN! Detect VS Code, use predefined value!")
+        else:
+            FILENAME = str(sys.argv[1])
+            dst_rod = int(sys.argv[2])
     else:
         if "hanoi_graph.py" in str(sys.argv[1]):
             print("WARN! Detect VS Code, use predefined value!")
@@ -354,7 +360,6 @@ if __name__ == "__main__":
             FILENAME = str(sys.argv[1])
             dst_rod = int(sys.argv[2])
             stage_param = int(sys.argv[3])
-
 
     FILEPATH = FOLDERNAME + FILENAME
     import InputTXT as par
