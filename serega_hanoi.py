@@ -194,6 +194,7 @@ def hanoi_gr_pre(diskCount, rodCostList,dst_rod,stage_param):
         print("Total cost: {0}".format(cost))
     #Вывод стоимости на каждом этапе
     print("- - - - - - - - - - - - - - - - - - - - - - -")
+    print("Dst_rod = ",dst_rod)
     print("Stage cost")
     stageName = ['1 pyr 3','1 pyr 4','1 pyr 5','1 pyr 6','2 pyr 66','2 pyr 65','2 pyr 64','2 pyr 63','2 pyr 55','2 pyr 54','2 pyr 53','2 pyr 44',
                 '2 pyr 43','2 pyr 33','1 pyr 7','2 pyr 77','2 pyr 76','2 pyr 75','2 pyr 74','2 pyr 73']
@@ -345,7 +346,7 @@ if __name__ == "__main__":
     dst_rod = 3
     stage_param = 10000
 
-    if len(sys.argv) < 3:
+    if len(sys.argv) < 2:
         print("WARN! Use predefined value!")   
     elif len(sys.argv) < 4:
         if "hanoi_graph.py" in str(sys.argv[1]):
@@ -353,6 +354,11 @@ if __name__ == "__main__":
         else:
             FILENAME = str(sys.argv[1])
             dst_rod = int(sys.argv[2])
+    elif len(sys.argv) < 3:
+        if "hanoi_graph.py" in str(sys.argv[1]):
+            print("WARN! Detect VS Code, use predefined value!")
+        else:
+            FILENAME = str(sys.argv[1])
     else:
         if "hanoi_graph.py" in str(sys.argv[1]):
             print("WARN! Detect VS Code, use predefined value!")
