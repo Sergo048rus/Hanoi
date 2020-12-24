@@ -102,27 +102,27 @@ def pyramid_xx(diskCount,rodCost,dst_rod,pyr1,pyr2):
         diskCount-=3
 
     if pyr2 == 8:
-        cost_2,path_dst_2,path_end_2 = pyramid_8(rodCost,dst_rod)
+        cost_1,path_dst_1,path_end_1 = pyramid_8(rodCost,dst_rod)
         rodCost.pop(dst_rod)
         diskCount-=8
     elif pyr2 == 7:
-        cost_2,path_dst_2,path_end_2 = pyramid_7(rodCost,dst_rod)
+        cost_1,path_dst_1,path_end_1 = pyramid_7(rodCost,dst_rod)
         rodCost.pop(dst_rod)
         diskCount-=7
     elif pyr2 == 6:
-        cost_2,path_dst_2,path_end_2 = pyramid_6(rodCost,dst_rod)
+        cost_1,path_dst_1,path_end_1 = pyramid_6(rodCost,dst_rod)
         rodCost.pop(dst_rod)
         diskCount-=6
     elif pyr2 == 5:
-        cost_2,path_dst_2,path_end_2 = pyramid_5(rodCost,dst_rod)
+        cost_1,path_dst_1,path_end_1 = pyramid_5(rodCost,dst_rod)
         rodCost.pop(dst_rod)
         diskCount-=5
     elif pyr2 == 4:
-        cost_2,path_dst_2,path_end_2 = pyramid_4(rodCost,dst_rod)
+        cost_1,path_dst_1,path_end_1 = pyramid_4(rodCost,dst_rod)
         rodCost.pop(dst_rod)
         diskCount-=4
     elif pyr2 == 3:
-        cost_2,path_dst_2,path_end_2 = pyramid_3(rodCost,dst_rod)
+        cost_1,path_dst_1,path_end_1 = pyramid_3(rodCost,dst_rod)
         rodCost.pop(dst_rod)
         diskCount-=3
 
@@ -231,7 +231,7 @@ def pyramid_xxx(diskCount,rodCost,dst_rod,pyr1,pyr2,pyr3):
 
 
 def hanoi_gr_pre(diskCount, rodCostList,dst_rod,stage_param):
-    __maxStage = 35
+    __maxStage = 27
     if stage_param == 1:
         range_maxStage = range(0,int(__maxStage/2))
     elif stage_param == 2:
@@ -420,83 +420,45 @@ def condition_check(diskCount,rodCost,dst_rod,stage):                          #
         else:
             print('STAGE 19: ERR count disk')
     if stage == 20:
-        if diskCount > 8 and diskCount < 16:
-            cost,path_dst,path_end = pyramid_8(rodCost,dst_rod)
-            rodCost.pop(dst_rod)
-            diskCount-=8
-            return cost,path_dst,path_end,diskCount
-        else:
-            print('STAGE 20: ERR count disk')
-    if stage == 21:
-        if diskCount > 18:
-            return pyramid_xx(diskCount,rodCost,dst_rod,8,8)
-        else:
-            print('STAGE 21: ERR count disk')
-    if stage == 22:
-        if diskCount > 18:
-            return pyramid_xx(diskCount,rodCost,dst_rod,8,7)
-    else:
-        print('STAGE 22: ERR count disk')
-    if stage == 23:
-        if diskCount > 17:
-            return pyramid_xx(diskCount,rodCost,dst_rod,8,6)
-    else:
-        print('STAGE 23: ERR count disk')
-    if stage == 24:
-        if diskCount > 15:
-            return pyramid_xx(diskCount,rodCost,dst_rod,8,5)
-    else:
-        print('STAGE 24: ERR count disk')
-    if stage == 25:
-        if diskCount > 14:
-            return pyramid_xx(diskCount,rodCost,dst_rod,8,4)
-    else:
-        print('STAGE 25: ERR count disk')
-    if stage == 26:
-        if diskCount > 13 and diskCount < 18:
-            return pyramid_xx(diskCount,rodCost,dst_rod,8,3)
-    else:
-        print('STAGE 26: ERR count disk')
-    if stage == 27:
         if diskCount > 12 and diskCount < 18:
             return pyramid_xxx(diskCount,rodCost,dst_rod,3,3,3)
     else:
-        print('STAGE 27: ERR count disk')
-    if stage == 28:
+        print('STAGE 20: ERR count disk')
+    if stage == 21:
         if diskCount > 13:
             return pyramid_xxx(diskCount,rodCost,dst_rod,4,4,3)
     else:
-        print('STAGE 28: ERR count disk')
-    if stage == 29:
+        print('STAGE 21: ERR count disk')
+    if stage == 22:
         if diskCount > 14:
             return pyramid_xxx(diskCount,rodCost,dst_rod,5,4,3)
     else:
-        print('STAGE 29: ERR count disk')
-    if stage == 30:
+        print('STAGE 22: ERR count disk')
+    if stage == 23:
         if diskCount > 15:
             return pyramid_xxx(diskCount,rodCost,dst_rod,5,5,3)
     else:
-        print('STAGE 30: ERR count disk')
-    if stage == 31:
+        print('STAGE 23: ERR count disk')
+    if stage == 24:
         if diskCount > 16:
             return pyramid_xxx(diskCount,rodCost,dst_rod,6,5,3)
     else:
-        print('STAGE 31: ERR count disk')
-    if stage == 32:
+        print('STAGE 25: ERR count disk')
+    if stage == 25:
         if diskCount > 17:
             return pyramid_xxx(diskCount,rodCost,dst_rod,6,6,3)
     else:
-        print('STAGE 32: ERR count disk')
-    if stage == 33:
+        print('STAGE 25: ERR count disk')
+    if stage == 26:
         if diskCount > 17:
             return pyramid_xxx(diskCount,rodCost,dst_rod,5,5,5)
     else:
-        print('STAGE 33: ERR count disk')
-    if stage == 34:
+        print('STAGE 26: ERR count disk')
+    if stage == 27:
         if diskCount > 17:
             return pyramid_xxx(diskCount,rodCost,dst_rod,6,5,4)
     else:
-        print('STAGE 34: ERR count disk')
+        print('STAGE 27: ERR count disk')
 
 
 
