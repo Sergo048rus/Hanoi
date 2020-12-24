@@ -425,7 +425,7 @@ def condition_check(diskCount,rodCost,dst_rod,stage):                          #
         else:
             print('STAGE 20: ERR count disk')
     if stage == 21:
-        if diskCount > 13:
+        if diskCount > 13 and diskCount < 18:
             return pyramid_xxx(diskCount,rodCost,dst_rod,4,4,3)
         else:
             print('STAGE 21: ERR count disk')
