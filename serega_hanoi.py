@@ -273,7 +273,7 @@ def hanoi_gr_pre(diskCount, rodCostList,dst_rod,stage_param):
                 exportPath1 = os.path.abspath(os.path.dirname(os.path.abspath(__file__)) + ("/solver_out/{0}_path.txt".format(FILENAME_OUT)))
                 exportPath2 = os.path.abspath(os.path.dirname(os.path.abspath(__file__)) + ("/solver_out/{0}_path2.txt".format(FILENAME_OUT)))
                 solver.exportPathToFile(exportPath1, path, cost)
-                # exportPathToFileAlternate(exportPath2, path, cost)
+                solver.exportPathToFileAlternate(exportPath2, path, cost)
 
                 print("Total cost: {0}".format(cost))
                 
