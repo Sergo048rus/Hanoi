@@ -136,7 +136,16 @@ class HanoiGraphOrder():
 
 
 if __name__ == "__main__": 
-    FILENAME = "good_test/t4.txt" 
+    # FILENAME = "new/r4_1.txt" 
+    # FILENAME = "new/r4_2.txt"
+    # FILENAME = "new/r4_3.txt"
+    # FILENAME = "new/r4_4.txt"
+
+    # FILENAME = "new/r5_1.txt" 
+    # FILENAME = "new/r5_2.txt"
+    FILENAME = "new/r5_3.txt"
+    # FILENAME = "new/r5_4.txt"
+
 
     parser = parser.InputTXT()
 
@@ -144,7 +153,9 @@ if __name__ == "__main__":
     print(' DiskCount = ',diskCount,'\n','Column = ', column,'\n','Err = ', err,'\n', 'Cost', diskCost)
 
     order, sizeOrder, returnErr = parser.ReadOrder(FILENAME)
+    
+
     if returnErr == 'OK' and err == 'OK':
         graph = HanoiGraphOrder(diskCount, diskCost, order, debugLevel=1)
         print("Total cost: {0}".format(graph.orderCost))
-        graph.draw()
+        # graph.draw()
