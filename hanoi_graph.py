@@ -1,4 +1,5 @@
 import os
+import sys
 import networkx as nx
 import matplotlib.pyplot as plt 
 
@@ -64,27 +65,54 @@ class HanoiGraph():
         diskPlaced = False
         # для каждой ноды в текущем поколении
         for node in self.genDict[genIndex]:
+
+            srcBlocked = False
+            dstBlocked = False
             # для каждого диска в ноде берем все возможные/невозможные варианты
             for i in range(0,len(node) - self.placedDiskCount): # без уже поставленных на место дисков
+                for j in range(0,i):
+                    if node[j] == node[i]:
+                        srcBlocked = True
+                        break
+                if srcBlocked:
+                    srcBlocked = False
+                    continue
+        
                 for r in self.rodRange:
                     if r != int(node[i]):        # если возможна замена, меняем i-й элемент 
                         if i == (len(node) - 1): # !check boundary cases!
                             repl = node[:i] + str(r)
+                            for k in range(0,i):
+                                if node[k] == str(r):
+                                    dstBlocked = True
+                                    break
                         elif i == 0:
                             repl = str(r) + node[1:]
                         else:
                             repl = node[:i] + str(r) + node[i+1:] 
+                            for k in range(0,i):
+                                if node[k] == str(r):
+                                    dstBlocked = True
+                                    break
                         # print(node + "->" + repl + " gen " + str(genIndex)) 
+
+                        if dstBlocked:
+                            dstBlocked = False
+                            continue
+                       
 
                         # если такая нода возможна, добавляем ее
                         res = True
-                        for newNode in newGen: # дупликат из новых
-                            if newNode == repl:
-                                res = False
-                        if res:        
-                            res = self.checkGenDict(genIndex, repl) # проверяем, что новая нода не из предыдущих поколений
+                        # for newNode in newGen: # дупликат из новых # w/o 2.89sec, with 3.49sec
+                        #     if newNode == repl:
+                        #         res = False
+                        # if res:        
+                            #res = self.checkGenDict(genIndex, repl) # проверяем, что новая нода не из предыдущих поколений
+                        # if res:
+                        if self.graph.has_node(repl):
+                            res = False
                         if res:
-                            res = self.tryToAddNode(self.graph.nodes[node], repl) # пробуем добавить
+                            res = self.tryToAddNode(self.graph.nodes[node], repl, i) # пробуем добавить
                         if res: 
                             newGen.append(repl) 
                             if repl[-1 - self.placedDiskCount] == targetRode and repl[-1 - self.placedDiskCount + 1] == targetRode:
@@ -92,7 +120,7 @@ class HanoiGraph():
                                 diskPlaced = True
                                 
         if diskPlaced:  
-            # print('Disk SET #{0}'.format(self.placedDiskCount + 1))
+            # print('Disk SET #{0}'.format(self.placedDiskCount + 1)) 0.05488 + 0.019946 // 0.0498681068420 + 0.018913269
             self.placedDiskCount += 1
             # раз диск поставлен надо удалить остальные "неправильные" ноды
             newGen = [x for x in newGen if str(targetRode * self.placedDiskCount) in x[-1 - self.placedDiskCount + 1:]] 
@@ -122,37 +150,37 @@ class HanoiGraph():
                 fos.write("gen #{0}: {1}\r\n".format(k,self.genDict[k]))
 
     # добавляет ноду со связью, если это возможно
-    def tryToAddNode(self, rootNode, dstNodeName):
-        countOfChanges = 0
-        changedIndex = 0
-        for i in range(0, self.diskCount):
-            if rootNode["name"][i] != dstNodeName[i]:
-                changedIndex = i
-                countOfChanges += 1
+    def tryToAddNode(self, rootNode, dstNodeName, index):
+        # countOfChanges = 0
+        # changedIndex = 0
+        # for i in range(0, self.diskCount):
+        #     if rootNode["name"][i] != dstNodeName[i]:
+        #         changedIndex = i
+        #         countOfChanges += 1
 
-        if countOfChanges > 1:
-            # self.DEBUG_PRINT("Multiple move [{dst}] <- [{root}]".format(i=changedIndex, dst=dstNodeName, root=rootNode["name"]))
-            return False
+        # if countOfChanges > 1:
+        #     # self.DEBUG_PRINT("Multiple move [{dst}] <- [{root}]".format(i=changedIndex, dst=dstNodeName, root=rootNode["name"]))
+        #     return False
 
-        if self.isDiskLocked(rootNode, changedIndex):
-            # self.DEBUG_PRINT("Disk #{i} locked [{dst}] <- [{root}]".format(i=changedIndex, dst=dstNodeName, root=rootNode["name"]))
-            return False
+        # if self.isDiskLocked(rootNode, changedIndex):
+        #     # self.DEBUG_PRINT("Disk #{i} locked [{dst}] <- [{root}]".format(i=changedIndex, dst=dstNodeName, root=rootNode["name"]))
+        #     return False
 
-        if self.isDiskMoveLocked(dstNodeName, changedIndex):
-            # self.DEBUG_PRINT("Disk move locked [{dst}] <- [{root}]".format(i=changedIndex, dst=dstNodeName, root=rootNode["name"]))
-            return False
+        # if self.isDiskMoveLocked(dstNodeName, changedIndex):
+        #     # self.DEBUG_PRINT("Disk move locked [{dst}] <- [{root}]".format(i=changedIndex, dst=dstNodeName, root=rootNode["name"]))
+        #     return False
 
-        for n in self.genDict[self.genIndex]:
-            if self.graph.nodes[n]["name"] == dstNodeName:
-                self.DEBUG_PRINT("Node [{0}] exists, add edge".format(dstNodeName))
-                self.graph.add_edge(rootNode, n, weight=self.rodCost[int(dstNodeName[changedIndex])])
-                return False
+        # for n in self.genDict[self.genIndex]:
+        #     if self.graph.nodes[n]["name"] == dstNodeName:
+        #         self.DEBUG_PRINT("Node [{0}] exists, add edge".format(dstNodeName))
+        #         self.graph.add_edge(rootNode, n, weight=self.rodCost[int(dstNodeName[changedIndex])])
+        #         return False
 
-        self.graph.add_node(dstNodeName, color=self.ORDINARY_NODE_COLOR, # create node
-                                         weight=self.rodCost[int(dstNodeName[changedIndex])],
+        self.graph.add_node(dstNodeName, color=self.ORDINARY_NODE_COLOR, # create node int(index)
+                                         weight=self.rodCost[int(dstNodeName[index])],
                                          name=dstNodeName) 
 
-        self.graph.add_edge(rootNode["name"], dstNodeName, weight=self.rodCost[int(dstNodeName[changedIndex])])
+        self.graph.add_edge(rootNode["name"], dstNodeName, weight=self.rodCost[int(dstNodeName[index])])
         
         # self.DEBUG_PRINT("Add node [{dst}] <-{cost}-- [{root}]".format(cost=self.rodCost[int(dstNodeName[changedIndex])],
         #                                                         dst=dstNodeName, root=rootNode["name"]))
@@ -210,10 +238,57 @@ class HanoiGraph():
         self.DEBUG_PRINT(srcNode + "-D>" + dstNode)
         self.orderCost, self.orderPath = nx.single_source_dijkstra(self.graph, srcNode, dstNode)
 
+    def calcCostBF(self, src, dst):
+        self.DEBUG_PRINT("Start pathfinder - Bellman-Ford")
+        srcNode = str(src) * self.diskCount
+        dstNode = str(dst) * self.diskCount
+        self.DEBUG_PRINT(srcNode + "-D>" + dstNode)
+        self.orderCost, self.orderPath = nx.single_source_bellman_ford(self.graph, srcNode, dstNode)
+
+    # def calcCostAstar(self, src, dst):
+    #     self.DEBUG_PRINT("Start pathfinder - A*")
+    #     srcNode = str(src) * self.diskCount
+    #     dstNode = str(dst) * self.diskCount
+    #     self.DEBUG_PRINT(srcNode + "-D>" + dstNode)
+    #     self.orderCost, self.orderPath = nx.single_source_bellman_ford(self.graph, srcNode, dstNode)
+
+def exportPathToFile(filepath, path, cost):
+    with open(str(filepath), "w", encoding="utf-8") as fos:
+        fos.write("=== Hanoi pathfinder result ===\r\n")
+        fos.write("Cost: {0}\r\n".format(cost))
+        fos.write("Path:\r\n")
+        for move in path:
+            fos.write("{0}\n".format(move))
+
+def exportPathToFileAlternate(filepath, path, cost):
+    with open(str(filepath), "w", encoding="utf-8") as fos:
+        fos.write("=== Hanoi pathfinder result ===\r\n")
+        fos.write("Cost: {0}\r\n".format(cost))
+        fos.write("Path:\r\n")
+        for i in range(1,len(path)):
+            disk,src,dst = "","",""
+            for j in range(0,len(path[i])):
+                if path[i][j] != path[i-1][j]:
+                    disk = j
+                    src = path[i-1][j]
+                    dst = path[i][j]
+                    break
+            fos.write("{0} {1} {2}\n".format(disk, src, dst))
+        
+        
 
 if __name__ == "__main__": 
+    FILENAME = "8d6r.txt"
+
+    if len(sys.argv) < 2:
+        print("WARN! Use predefined value!")   
+    else:
+        if "hanoi_graph.py" in str(sys.argv[1]):
+            print("WARN! Detect VS Code, use predefined value!")
+        else:
+            FILENAME = str(sys.argv[1])
+
     FOLDERNAME = "solver_test/"
-    FILENAME = "6d4r.txt" 
     FILEPATH = FOLDERNAME + FILENAME
 
     import InputTXT as par
@@ -222,8 +297,8 @@ if __name__ == "__main__":
     diskCount, column, diskCost, err = parser.ReadDisk(FILEPATH)
     print('TESTFILE: %s' % (FILEPATH))
     print(' DiskCount = ',diskCount,'\n','Column = ', column,'\n','Err = ', err,'\n', 'Cost', diskCost)
-
     # order, sizeOrder, returnErr = parser.ReadOrder(FILENAME)
+
     if err == 'OK':
         sw = StopWatch()
         graph = HanoiGraph(diskCount, diskCost, debugLevel=0)
@@ -233,7 +308,16 @@ if __name__ == "__main__":
         graph.exportGen(exportPath)
         # graph.draw()
 
-        graph.calcCostDeijkstra(0,1) 
-        print("Shortest path: {0}".format(graph.orderPath))
+        sw = StopWatch()
+        graph.calcCostBF(0,1) 
+        sw.stop()
+
+        # один формат наш, другой Васекина, можно оставить любой или выпилить все для скорости
+        exportPath1 = os.path.abspath(os.path.dirname(os.path.abspath(__file__)) + ("/solver_out/{0}_path.txt".format(FILENAME.split('.')[0])))
+        exportPath2 = os.path.abspath(os.path.dirname(os.path.abspath(__file__)) + ("/solver_out/{0}_path2.txt".format(FILENAME.split('.')[0])))
+        exportPathToFile(exportPath1, graph.orderPath, graph.orderCost)
+        # exportPathToFileAlternate(exportPath2, graph.orderPath, graph.orderCost)
+
+        # print("Shortest path: {0}".format(graph.orderPath))
         print("Total cost: {0}".format(graph.orderCost))
 

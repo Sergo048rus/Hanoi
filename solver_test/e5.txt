@@ -1,0 +1,7 @@
+INIT
+NPARTS 10
+/
+
+COST
+0 0 0
+/

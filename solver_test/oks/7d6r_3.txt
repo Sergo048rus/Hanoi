@@ -1,0 +1,10 @@
+INIT
+NPARTS 7
+/
+
+COST
+2 2 3 4 50 666
+/
+
+ORDER
+/
